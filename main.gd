@@ -14,40 +14,44 @@ class Cursor:
 		#print_debug("record frame %s, %s", mouse_event)
 		self.history[frame] = mouse_event
 
-	func set_frame(frame: int):
+	func play_frame(frame: int):
 		if self.history.has(frame):
 			var curr_frame: InputEventMouse = self.history[frame]
 			self.cursor_texture.set_position(curr_frame.position)
 
 			var btn1_pressed = curr_frame.button_mask && 1
-			if btn1_pressed:
-				self.cursor_texture.scale = Vector2(4, 4)
-			elif !btn1_pressed:
-				self.cursor_texture.scale = Vector2(2, 2)
-			
+			var scale = 4 if btn1_pressed else 2
+			self.cursor_texture.scale = Vector2(scale, scale)
 			self.cursor_texture.show()
 			
 const cursor_lifetime = 1
-var time = cursor_lifetime
-var frame = 0
-var current_recording = Cursor.new(self)
-var cursors: Array[Cursor] = []
+var time
+var frame
+var current_recording
+var cursors: Array[Cursor]
+
+func reset_time():
+	time = 0
+	frame = 0
+	current_recording = Cursor.new(self)
+
+func _init():
+	cursors = []
+	reset_time()
 
 func _physics_process(delta):
-	time -= delta
-	if time <= 0:
-		time = cursor_lifetime
-		frame = 0
+	time += delta
+	if time >= cursor_lifetime:
 		cursors.push_back(current_recording)
-		current_recording = Cursor.new(self)
+		reset_time()
 
 	for cursor in cursors:
-		cursor.set_frame(frame)
+		cursor.play_frame(frame)
 
-	#print_debug("Time: %f" % rough_time)
 	frame += 1
+	#print_debug("Time: %f (frame: %d)" % [time, frame])
 
-func _unhandled_input(event):
+func _input(event):
 	if event is InputEventMouse:
 		current_recording.record_frame(frame, event)
 

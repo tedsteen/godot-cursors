@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bfksjpljlbr6p"]
 
-[ext_resource type="Texture2D" uid="uid://dsf5wsgolksw5" path="res://cursor-green.png" id="1_1lhw2"]
+[ext_resource type="Texture2D" uid="uid://bfks62vimbs51" path="res://cursor-green.png" id="1_1lhw2"]
 
 [node name="Cursor" type="TextureRect"]
 visible = false
