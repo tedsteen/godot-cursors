@@ -1,12 +1,18 @@
 [gd_scene load_steps=3 format=3 uid="uid://ucojeeym1pf7"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_w3ais"]
 [ext_resource type="PackedScene" uid="uid://cqqr1kr6p71dp" path="res://level.tscn" id="2_w4ekq"]
 
+[sub_resource type="GDScript" id="GDScript_s6kj2"]
+script/source = "extends Node2D
+
+
+"
+
 [node name="Main" type="Node2D"]
-script = ExtResource("1_w3ais")
+script = SubResource("GDScript_s6kj2")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
 anchor_mode = 0
 zoom = Vector2(3, 3)
 

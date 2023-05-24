@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqqr1kr6p71dp"]
+[gd_scene load_steps=5 format=3 uid="uid://cqqr1kr6p71dp"]
 
 [ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="1_juctw"]
+[ext_resource type="Script" path="res://level.gd" id="1_qbpj7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bsw1n"]
 texture = ExtResource("1_juctw")
@@ -261,6 +262,7 @@ texture = ExtResource("1_juctw")
 sources/0 = SubResource("TileSetAtlasSource_bsw1n")
 
 [node name="level" type="Node2D"]
+script = ExtResource("1_qbpj7")
 
 [node name="BackgroundRect" type="ColorRect" parent="."]
 offset_right = 384.0
@@ -281,4 +283,4 @@ color = Color(0.0666667, 0.0196078, 0.188235, 1)
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_gyweg")
 format = 2
-layer_0/tile_data = PackedInt32Array(65537, 262144, 4, 131073, 262144, 4, 196609, 262144, 4, 262145, 262144, 4, 327681, 262144, 4, 393217, 262144, 4, 262146, 262144, 4, 458753, 262144, 4, 65539, 262144, 4, 131075, 262144, 4, 196611, 262144, 4, 262147, 262144, 4, 327683, 262144, 4, 393219, 262144, 4, 458755, 262144, 4, 65541, 262144, 4, 131077, 262144, 4, 196613, 262144, 4, 262149, 262144, 4, 327685, 262144, 4, 393221, 262144, 4, 458757, 262144, 4, 458758, 262144, 4, 458759, 262144, 4, 262150, 262144, 4, 65542, 262144, 4, 65543, 262144, 4, 65545, 262144, 4, 65546, 262144, 4, 65547, 262144, 4, 131083, 262144, 4, 196619, 262144, 4, 262155, 262144, 4, 327691, 262144, 4, 393227, 262144, 4, 458762, 262144, 4, 393225, 262144, 4)
+layer_0/tile_data = PackedInt32Array(131077, 262144, 3, 262158, 262144, 3, 589833, 262144, 3)
