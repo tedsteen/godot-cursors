@@ -32,6 +32,7 @@ func _physics_process(delta):
 	#print_debug("Time: %f (frame: %d)" % [time, frame])
 
 func _input(event):
+	
 	if event is InputEventMouse:
-		current_recording.record_frame(frame, event)
+		current_recording.record_frame(frame, $"Camera2D".make_input_local(event))
 
