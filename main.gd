@@ -29,6 +29,7 @@ func _physics_process(delta):
 		cursor.play_frame(frame)
 
 	frame += 1
+	$"Level/TimeRect".size.y = $"Level/BackgroundRect".size.y * (1 - time / cursor_lifetime)
 	#print_debug("Time: %f (frame: %d)" % [time, frame])
 
 func _input(event):
