@@ -1,9 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bfksjpljlbr6p"]
+[gd_scene load_steps=3 format=3 uid="uid://bfksjpljlbr6p"]
 
 [ext_resource type="Texture2D" uid="uid://bfks62vimbs51" path="res://assets/cursor-green.png" id="1_q046r"]
+[ext_resource type="Script" path="res://cursor.gd" id="2_pepyo"]
 
 [node name="Cursor" type="TextureRect"]
 visible = false
 offset_right = 12.0
 offset_bottom = 19.0
 texture = ExtResource("1_q046r")
+script = ExtResource("2_pepyo")
+cursor_click_size = 1.6
