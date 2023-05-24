@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://bfksjpljlbr6p"]
 
-[ext_resource type="Texture2D" uid="uid://bfks62vimbs51" path="res://cursor-green.png" id="1_1lhw2"]
+[ext_resource type="Texture2D" uid="uid://bfks62vimbs51" path="res://assets/cursor-green.png" id="1_q046r"]
 
 [node name="Cursor" type="TextureRect"]
 visible = false
 offset_right = 12.0
 offset_bottom = 19.0
-texture = ExtResource("1_1lhw2")
+texture = ExtResource("1_q046r")
