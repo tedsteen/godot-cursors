@@ -3,7 +3,7 @@ class_name Main
 
 var cursor_res = preload("res://cursor.tscn")
 
-const cursor_lifetime = 1
+@export var cursor_lifetime = 5
 var time
 var frame
 var current_recording
@@ -32,7 +32,6 @@ func _physics_process(delta):
 	#print_debug("Time: %f (frame: %d)" % [time, frame])
 
 func _input(event):
-	
 	if event is InputEventMouse:
 		current_recording.record_frame(frame, $"Camera2D".make_input_local(event))
 
