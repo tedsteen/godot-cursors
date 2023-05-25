@@ -1,8 +1,7 @@
 extends TextureRect
 class_name Cursor
 
-@export var cursor_size = 1.0
-@export var cursor_click_size = 1.5
+@export var cursor_click_size = 0.7
 
 var history = {}
 
@@ -16,8 +15,8 @@ func play_frame(frame: int):
 		self.set_position(curr_frame.position)
 
 		var btn1_pressed = curr_frame.button_mask && 1
-		var texture_scale = cursor_click_size if btn1_pressed else cursor_size
-		texture_scale *= 0.4
+		var texture_scale = cursor_click_size if btn1_pressed else 1
+
 		self.scale = Vector2(texture_scale, texture_scale)
 		self.show()
 		
