@@ -13,7 +13,7 @@ func reset_time():
 	current_recording = cursor_res.instantiate()
 	add_child(current_recording)
 
-func _init():
+func _ready():
 	cursors = []
 	reset_time()
 

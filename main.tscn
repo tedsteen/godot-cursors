@@ -1,23 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://ucojeeym1pf7"]
+[gd_scene load_steps=3 format=3 uid="uid://ucojeeym1pf7"]
 
-[ext_resource type="Texture2D" uid="uid://bqlc8iom0lne4" path="res://assets/cursor-white.png" id="2_1tvtj"]
-[ext_resource type="PackedScene" uid="uid://cqqr1kr6p71dp" path="res://level.tscn" id="2_w4ekq"]
+[ext_resource type="PackedScene" uid="uid://cqqr1kr6p71dp" path="res://Level.tscn" id="2_w4ekq"]
 
 [sub_resource type="GDScript" id="GDScript_s6kj2"]
 script/source = "extends Node2D
 
 
-func _input(event):
-	if event is InputEventMouse:
-		$\"MousePointer\".position = %\"Camera2D\".make_input_local(event).position
-
-func _notification(what):
-	if what == NOTIFICATION_WM_MOUSE_ENTER:
-		DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_HIDDEN)
-		$\"MousePointer\".show()
-	elif what == NOTIFICATION_WM_MOUSE_EXIT:
-		DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_VISIBLE)
-		$\"MousePointer\".hide()
+#func _input(event):
+#	if event is InputEventMouse:
+#		$\"MousePointer\".position = %\"Camera2D\".make_input_local(event).position
+#
+#func _notification(what):
+#	if what == NOTIFICATION_WM_MOUSE_ENTER:
+#		DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_HIDDEN)
+#		$\"MousePointer\".show()
+#	elif what == NOTIFICATION_WM_MOUSE_EXIT:
+#		DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_VISIBLE)
+#		$\"MousePointer\".hide()
 "
 
 [node name="Main" type="Node2D"]
@@ -29,9 +28,3 @@ anchor_mode = 0
 zoom = Vector2(3, 3)
 
 [node name="Level" parent="." instance=ExtResource("2_w4ekq")]
-
-[node name="MousePointer" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("2_1tvtj")
-stretch_mode = 2
