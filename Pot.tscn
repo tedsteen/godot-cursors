@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://dp0ejnluid14g"]
+
+[ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="1_11gtn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0ctk5"]
+radius = 7.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ht3e"]
+atlas = ExtResource("1_11gtn")
+region = Rect2(64, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ayaxs"]
+atlas = ExtResource("1_11gtn")
+region = Rect2(80, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5cs1"]
+atlas = ExtResource("1_11gtn")
+region = Rect2(96, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dlurh"]
+atlas = ExtResource("1_11gtn")
+region = Rect2(112, 48, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_liiof"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ht3e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ayaxs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w5cs1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dlurh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Pot" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_0ctk5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 1)
+sprite_frames = SubResource("SpriteFrames_liiof")
