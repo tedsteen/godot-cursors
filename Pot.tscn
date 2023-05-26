@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dp0ejnluid14g"]
+[gd_scene load_steps=10 format=3 uid="uid://dp0ejnluid14g"]
 
 [ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="1_11gtn"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_0ctk5"]
-radius = 7.0
+[ext_resource type="Script" path="res://Pot.gd" id="1_v06rg"]
+[ext_resource type="FontFile" uid="uid://c8br8cqamatr3" path="res://assets/Graph-35-pix.ttf" id="3_5yccx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3ht3e"]
 atlas = ExtResource("1_11gtn")
@@ -36,17 +35,34 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dlurh")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_0ctk5"]
+radius = 30.0167
+
 [node name="Pot" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_v06rg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 3)
-shape = SubResource("CircleShape2D_0ctk5")
+[node name="Label" type="Label" parent="."]
+offset_left = -27.0
+offset_top = -54.0
+offset_right = 27.0
+offset_bottom = -32.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_5yccx")
+text = "x999"
+horizontal_alignment = 1
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, 1)
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -9)
+scale = Vector2(4.3125, 4.3125)
 sprite_frames = SubResource("SpriteFrames_liiof")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_0ctk5")
