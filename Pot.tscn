@@ -44,7 +44,6 @@ animations = [{
 radius = 30.0167
 
 [node name="Pot" type="Area2D"]
-visible = false
 collision_mask = 2
 script = ExtResource("1_v06rg")
 
