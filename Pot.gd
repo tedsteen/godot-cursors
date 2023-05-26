@@ -8,7 +8,7 @@ class_name Pot
 @export var health: int : set = set_health
 
 func _ready():
-	set_health(randi() % 10 + 1)
+	set_health(randi() % 100 + 1)
 	
 func set_health(new_health: int):
 	health = new_health

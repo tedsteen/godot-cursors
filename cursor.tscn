@@ -4,8 +4,7 @@
 [ext_resource type="Script" path="res://cursor.gd" id="2_pepyo"]
 
 [node name="Cursor" type="TextureRect"]
-visible = false
-offset_right = 12.0
-offset_bottom = 19.0
+offset_right = 39.0
+offset_bottom = 62.0
 texture = ExtResource("1_q046r")
 script = ExtResource("2_pepyo")

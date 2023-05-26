@@ -18,6 +18,5 @@ func play_frame(frame: int, camera: Camera2D) -> InputEventMouse:
 		var texture_scale = cursor_click_size if btn1_pressed else 1.0
 
 		self.scale = Vector2(texture_scale, texture_scale)
-		self.show()
 		return curr_frame
 	return null

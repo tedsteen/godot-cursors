@@ -18,7 +18,10 @@ var point_params: = PhysicsPointQueryParameters2D.new()
 func reset_time(new_pots: bool):
 	time = 0
 	frame = 0
+	if current_recording: current_recording.show()
 	current_recording = cursor_res.instantiate()
+	current_recording.position = get_global_mouse_position()
+	current_recording.hide()
 	add_child(current_recording)
 
 	if new_pots:
