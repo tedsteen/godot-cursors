@@ -2,6 +2,8 @@ extends Node2D
 var cursor_res = preload("res://cursor.tscn")
 var pot_res = preload("res://entities/pot.tscn")
 var door_res = preload("res://entities/door.tscn")
+var gem_res = preload("res://entities/gem.tscn")
+
 var rng: RandomNumberGenerator
 
 @onready var background_rect = $Container/BackgroundRect
@@ -41,6 +43,7 @@ func generate_map_data(difficulty: int, amount: int) -> Array[Dictionary]:
 		available_stuff.append({"type": "pot", "health": rng.randi() % difficulty + 1 })
 	
 	available_stuff.append({ "type": "door" })
+	available_stuff.append({ "type": "gem" })
 	
 	if available_stuff.size() > width * height:
 		push_error("Can't fit content on map.")
@@ -82,6 +85,11 @@ func reset_time(new_pots: bool):
 				door.position = position
 				entities.append(door)
 				add_child(door)
+			elif map_data.type == "gem":
+				var gem: Gem = gem_res.instantiate()
+				gem.position = position
+				entities.append(gem)
+				add_child(gem)
 				
 func _physics_process(delta):	
 	time += delta
@@ -107,6 +115,8 @@ func handle_click(event: InputEventMouse):
 				entity.take_damage()
 			elif entity is Door:
 				print_debug("Knock...")
+			elif entity is Gem:
+				remove_child(entity)
 
 func _input(event):
 	if event is InputEventMouse:
