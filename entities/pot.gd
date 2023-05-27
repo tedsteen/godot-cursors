@@ -7,7 +7,10 @@ class_name Pot
 
 @export var health: int : set = set_health
 
-func take_damage():
+func _ready():
+	set_health(health)
+
+func handle_click(_event: InputEventMouse):
 	if health > 0:
 		health = health - 1
 		if health <= 0:

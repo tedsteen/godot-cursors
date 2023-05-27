@@ -6,8 +6,8 @@ var gem_res = preload("res://entities/gem.tscn")
 
 var rng: RandomNumberGenerator
 
-@onready var background_rect = $Container/BackgroundRect
-@onready var time_rect = $Container/TimeRect
+@onready var background_rect = %BackgroundRect
+@onready var time_rect = %TimeRect
 @onready var view_to_world = self.get_canvas_transform().affine_inverse()
 @onready var dss: = get_world_2d().direct_space_state
 
@@ -18,7 +18,6 @@ var time
 var frame
 var current_recording: Cursor
 var cursors: Array[Cursor]
-var entities: Array[Entity]
 
 var point_params: = PhysicsPointQueryParameters2D.new()
 
@@ -27,39 +26,40 @@ const CELL_SIZE = 90
 func _ready():
 	rng = RandomNumberGenerator.new()
 	rng.seed = map_seed
-	point_params.collide_with_areas = true #set it up
+	point_params.collide_with_areas = true
 	#point_params.collision_mask = 2
 	cursors = []
 	reset_time(true)
 
-func generate_map_data(difficulty: int, amount: int) -> Array[Dictionary]:
+func generate_map_data(difficulty: int, amount: int):	
+	var available_entities: Array[Entity] = []
+
+	for i in range(0, amount):
+		var pot: Pot = pot_res.instantiate()
+		pot.health = rng.randi() % difficulty + 1
+		available_entities.append(pot)
+
+	available_entities.append(door_res.instantiate())
+	available_entities.append(gem_res.instantiate())
+	
 	var width = int(background_rect.size.x / CELL_SIZE)
 	var height = int(background_rect.size.y / CELL_SIZE)
-	
-	var available_stuff: Array[Dictionary] = []
-	var free_slots: Array = range(0, width*height)
-	
-	for i in range(0, amount):
-		available_stuff.append({"type": "pot", "health": rng.randi() % difficulty + 1 })
-	
-	available_stuff.append({ "type": "door" })
-	available_stuff.append({ "type": "gem" })
-	
-	if available_stuff.size() > width * height:
+
+	if available_entities.size() > width * height:
 		push_error("Can't fit content on map.")
-		return []
+		return
 	
+	var free_slots: Array = range(0, width * height)
 	var map_data: Array[Dictionary] = []
-	for stuff in available_stuff:
+	for entity in available_entities:
 		var idx = rng.randi() % free_slots.size()
 		var coord = free_slots[idx]
-		stuff["position"] = Vector2((coord % width) * CELL_SIZE, int(coord / width) * CELL_SIZE)
-		map_data.append(stuff)
+		entity.position = Vector2((coord % width) * CELL_SIZE, int(coord / width) * CELL_SIZE)
+		entity.add_to_group("entities")
+		add_child(entity)
 		free_slots.remove_at(idx)
 
-	return map_data
-
-func reset_time(new_pots: bool):
+func reset_time(new_map: bool):
 	time = 0
 	frame = 0
 	if current_recording: current_recording.show()
@@ -68,37 +68,20 @@ func reset_time(new_pots: bool):
 	current_recording.hide()
 	add_child(current_recording)
 
-	if new_pots:
-		for entity in entities:
-			if entity is Pot:
-				remove_child(entity)
-		for map_data in generate_map_data(100, 10):
-			var position = map_data.position
-			if map_data.type == "pot":
-				var pot: Pot = pot_res.instantiate()
-				pot.position = position
-				entities.append(pot)
-				add_child(pot)
-				pot.health = map_data.health
-			elif map_data.type == "door":
-				var door: Door = door_res.instantiate()
-				door.position = position
-				entities.append(door)
-				add_child(door)
-			elif map_data.type == "gem":
-				var gem: Gem = gem_res.instantiate()
-				gem.position = position
-				entities.append(gem)
-				add_child(gem)
-				
+	if new_map:
+		for entity in get_tree().get_nodes_in_group("entities"):
+			entity.queue_free()
+		
+		generate_map_data(100, 10)
+
 func _physics_process(delta):	
 	time += delta
 	if time >= cursor_lifetime:
 		cursors.push_back(current_recording)
-		reset_time(false)
+		reset_time(true)
 
 	for cursor in cursors:
-		var event = cursor.play_frame(frame, %Camera2D)
+		var event = cursor.play_frame(frame, self.get_parent().get_node("%Camera2D"))
 		handle_click(event)
 	
 	frame += 1
@@ -109,14 +92,10 @@ func handle_click(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
 		point_params.position = event.position * view_to_world
 		var hits = dss.intersect_point(point_params)
+		
 		for hit in hits:
 			var entity = hit.collider
-			if entity is Pot:
-				entity.take_damage()
-			elif entity is Door:
-				print_debug("Knock...")
-			elif entity is Gem:
-				remove_child(entity)
+			entity.handle_click(event)
 
 func _input(event):
 	if event is InputEventMouse:
