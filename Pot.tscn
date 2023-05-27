@@ -1,26 +1,26 @@
-[gd_scene load_steps=10 format=3 uid="uid://dp0ejnluid14g"]
+[gd_scene load_steps=10 format=3 uid="uid://diu8jhre76jkw"]
 
-[ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="1_11gtn"]
-[ext_resource type="Script" path="res://Pot.gd" id="1_v06rg"]
-[ext_resource type="FontFile" uid="uid://c8br8cqamatr3" path="res://assets/Graph-35-pix.ttf" id="3_5yccx"]
+[ext_resource type="FontFile" uid="uid://c8br8cqamatr3" path="res://assets/Graph-35-pix.ttf" id="1_dmntw"]
+[ext_resource type="Script" path="res://pot.gd" id="1_vwsa4"]
+[ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="2_te7s4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3ht3e"]
-atlas = ExtResource("1_11gtn")
+atlas = ExtResource("2_te7s4")
 region = Rect2(64, 48, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ayaxs"]
-atlas = ExtResource("1_11gtn")
+atlas = ExtResource("2_te7s4")
 region = Rect2(80, 48, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w5cs1"]
-atlas = ExtResource("1_11gtn")
+atlas = ExtResource("2_te7s4")
 region = Rect2(96, 48, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dlurh"]
-atlas = ExtResource("1_11gtn")
+atlas = ExtResource("2_te7s4")
 region = Rect2(112, 48, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_liiof"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_6h1ke"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -40,31 +40,32 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0ctk5"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_vaa6q"]
 radius = 30.0167
 
-[node name="Pot" type="Area2D"]
-collision_mask = 2
-script = ExtResource("1_v06rg")
-
-[node name="Label" type="Label" parent="."]
-offset_left = 7.5
-offset_top = 2.0
-offset_right = 61.5
-offset_bottom = 24.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_5yccx")
-text = "x999"
-horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
+[node name="pot" type="Area2D"]
+script = ExtResource("1_vwsa4")
+metadata/_edit_vertical_guides_ = [45.0]
+metadata/_edit_horizontal_guides_ = [45.0]
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(34.5, 47)
+position = Vector2(45, 38)
 scale = Vector2(4.3125, 4.3125)
-sprite_frames = SubResource("SpriteFrames_liiof")
+sprite_frames = SubResource("SpriteFrames_6h1ke")
 animation = &"destroy"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(34.5, 55)
-shape = SubResource("CircleShape2D_0ctk5")
+position = Vector2(45, 46)
+shape = SubResource("CircleShape2D_vaa6q")
+
+[node name="Label" type="Label" parent="."]
+offset_top = 2.0
+offset_right = 90.0
+offset_bottom = 29.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("1_dmntw")
+theme_override_font_sizes/font_size = 16
+text = "x999"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true

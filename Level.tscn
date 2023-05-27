@@ -6,8 +6,8 @@
 script = ExtResource("1_qbpj7")
 
 [node name="Container" type="Panel" parent="."]
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 1170.0
+offset_bottom = 630.0
 
 [node name="BackgroundRect" type="ColorRect" parent="Container"]
 layout_mode = 1
@@ -34,8 +34,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 100
-theme_override_constants/margin_right = 100
+theme_override_constants/margin_left = 90
+theme_override_constants/margin_right = 90
 
 [node name="ProgressRect" type="ColorRect" parent="Container/MarginContainer"]
 layout_mode = 2
