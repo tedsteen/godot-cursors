@@ -1,6 +1,7 @@
 extends Node2D
 var cursor_res = preload("res://cursor.tscn")
 var pot_res = preload("res://pot.tscn")
+var rng: RandomNumberGenerator
 
 @onready var background_rect = $Container/BackgroundRect
 @onready var time_rect = $Container/TimeRect
@@ -8,6 +9,8 @@ var pot_res = preload("res://pot.tscn")
 @onready var dss: = get_world_2d().direct_space_state
 
 @export var cursor_lifetime = 5
+@export var seed = 0
+
 var time
 var frame
 var current_recording: Cursor
@@ -17,11 +20,19 @@ var point_params: = PhysicsPointQueryParameters2D.new()
 
 const CELL_SIZE = 90
 
+func _ready():
+	rng = RandomNumberGenerator.new()
+	rng.seed = seed
+	point_params.collide_with_areas = true #set it up
+	#point_params.collision_mask = 2
+	cursors = []
+	reset_time(true)
+
 func generate_pot_data(difficulty: int, amount: int) -> Array[Dictionary]:
 	var available_data: Array[Dictionary] = []
 	for x in range(0, background_rect.size.x / CELL_SIZE):
 		for y in range(0, background_rect.size.y / CELL_SIZE):
-			var data = { "health": randi() % difficulty + 1, "position": Vector2(x * CELL_SIZE, y * CELL_SIZE) }
+			var data = { "health": rng.randi() % difficulty + 1, "position": Vector2(x * CELL_SIZE, y * CELL_SIZE) }
 			available_data.append(data)
 
 	var pot_data: Array[Dictionary] = []
@@ -29,7 +40,7 @@ func generate_pot_data(difficulty: int, amount: int) -> Array[Dictionary]:
 		push_warning("Can't generate %d pots, there are only %d available." % [amount, available_data.size()])
 		amount = available_data.size()
 	for i in range(0, amount):
-		var x = randi() % available_data.size()
+		var x = rng.randi() % available_data.size()
 		pot_data.append(available_data[x])
 		available_data.remove_at(x)
 		
@@ -53,12 +64,6 @@ func reset_time(new_pots: bool):
 			pots.append(pot)
 			add_child(pot)
 			pot.health = pot_data.health
-
-func _ready():
-	point_params.collide_with_areas = true #set it up
-	#point_params.collision_mask = 2
-	cursors = []
-	reset_time(true)
 
 func _physics_process(delta):	
 	time += delta
