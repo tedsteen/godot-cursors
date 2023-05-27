@@ -36,7 +36,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_dlurh")
 }],
 "loop": false,
-"name": &"default",
+"name": &"destroy",
 "speed": 5.0
 }]
 
@@ -48,21 +48,23 @@ collision_mask = 2
 script = ExtResource("1_v06rg")
 
 [node name="Label" type="Label" parent="."]
-offset_left = -27.0
-offset_top = -54.0
-offset_right = 27.0
-offset_bottom = -32.0
+offset_left = 7.5
+offset_top = 2.0
+offset_right = 61.5
+offset_bottom = 24.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("3_5yccx")
 text = "x999"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -9)
+position = Vector2(34.5, 47)
 scale = Vector2(4.3125, 4.3125)
 sprite_frames = SubResource("SpriteFrames_liiof")
+animation = &"destroy"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
+position = Vector2(34.5, 55)
 shape = SubResource("CircleShape2D_0ctk5")

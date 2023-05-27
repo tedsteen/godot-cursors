@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqqr1kr6p71dp"]
+[gd_scene load_steps=2 format=3 uid="uid://cqqr1kr6p71dp"]
 
 [ext_resource type="Script" path="res://level.gd" id="1_qbpj7"]
-[ext_resource type="PackedScene" uid="uid://dp0ejnluid14g" path="res://Pot.tscn" id="2_llrc6"]
 
 [node name="level" type="Node2D"]
 script = ExtResource("1_qbpj7")
@@ -41,12 +40,3 @@ theme_override_constants/margin_right = 100
 [node name="ProgressRect" type="ColorRect" parent="Container/MarginContainer"]
 layout_mode = 2
 color = Color(0.0666667, 0.0196078, 0.188235, 1)
-
-[node name="Pot" parent="." instance=ExtResource("2_llrc6")]
-position = Vector2(200, 93)
-
-[node name="Pot2" parent="." instance=ExtResource("2_llrc6")]
-position = Vector2(323, 269)
-
-[node name="Pot3" parent="." instance=ExtResource("2_llrc6")]
-position = Vector2(449, 81)

@@ -27,10 +27,11 @@ func reset_time(new_pots: bool):
 	if new_pots:
 		for pot in pots:
 			remove_child(pot)
-		for i in range(0, 4):
+		for i in range(0, 10):
 			var pot: Pot = pot_res.instantiate()
 			#print_debug("pot: %s" % pot.position)
-			pot.position = Vector2(background_rect.size.x * randf(), background_rect.size.y * randf())
+			pot.position_snapped(Vector2(background_rect.size.x * randf(), (background_rect.size.y - Pot.CELL_SIZE) * randf()))
+			#pot.position_snapped(Vector2(0, 0))
 			pots.append(pot)
 			add_child(pot)
 
@@ -38,7 +39,7 @@ func _ready():
 	point_params.collide_with_areas = true #set it up
 	#point_params.collision_mask = 2
 	cursors = []
-	reset_time(false)
+	reset_time(true)
 
 func _physics_process(delta):	
 	time += delta
