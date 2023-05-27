@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://dxjvwmw4wxg4a"]
+
+[ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_iibm5"]
+[ext_resource type="Script" path="res://entities/door.gd" id="2_vgnbq"]
+[ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="3_i5vks"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hco5l"]
+atlas = ExtResource("3_i5vks")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l7kqa"]
+atlas = ExtResource("3_i5vks")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7f03q"]
+atlas = ExtResource("3_i5vks")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00cy3"]
+atlas = ExtResource("3_i5vks")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_82wys"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hco5l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l7kqa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7f03q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_00cy3")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lsrlo"]
+size = Vector2(64, 64)
+
+[node name="Door" instance=ExtResource("1_iibm5")]
+script = ExtResource("2_vgnbq")
+metadata/_edit_vertical_guides_ = [64.0]
+metadata/_edit_horizontal_guides_ = [64.0]
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+position = Vector2(32, 32)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_82wys")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_lsrlo")

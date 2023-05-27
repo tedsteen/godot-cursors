@@ -1,9 +1,9 @@
-extends Node2D
+extends Entity
 
 class_name Pot
 
 @onready var label = $Label
-@onready var animated_sprite = $AnimatedSprite
+@onready var animated_sprite = $AnimatedSprite2D
 
 @export var health: int : set = set_health
 
@@ -15,4 +15,4 @@ func take_damage():
 
 func set_health(p_health: int):
 	health = p_health
-	label.text = "x%d" % health
+	if label: label.text = "x%d" % health

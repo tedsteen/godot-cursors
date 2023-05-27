@@ -1,6 +1,6 @@
 extends Node2D
 var cursor_res = preload("res://cursor.tscn")
-var pot_res = preload("res://pot.tscn")
+var pot_res = preload("res://entities/pot.tscn")
 var rng: RandomNumberGenerator
 
 @onready var background_rect = $Container/BackgroundRect
@@ -58,7 +58,7 @@ func reset_time(new_pots: bool):
 	if new_pots:
 		for pot in pots:
 			remove_child(pot)
-		for pot_data in generate_pot_data(100, 4):
+		for pot_data in generate_pot_data(100, 40):
 			var pot: Pot = pot_res.instantiate()
 			pot.position = pot_data.position
 			pots.append(pot)
@@ -84,8 +84,9 @@ func handle_click(event: InputEventMouse):
 		point_params.position = event.position * view_to_world
 		var hits = dss.intersect_point(point_params)
 		for hit in hits:
-			var pot: Pot = hit.collider
-			pot.take_damage()
+			var entity = hit.collider
+			if entity is Pot:
+				entity.take_damage()
 
 func _input(event):
 	if event is InputEventMouse:

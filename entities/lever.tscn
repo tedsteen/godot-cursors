@@ -1,0 +1,51 @@
+[gd_scene load_steps=9 format=3 uid="uid://bwewfkpbvqnx6"]
+
+[ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_pmgk5"]
+[ext_resource type="Script" path="res://entities/lever.gd" id="2_2ow4f"]
+[ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="3_wgpht"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsvtt"]
+atlas = ExtResource("3_wgpht")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c7c7p"]
+atlas = ExtResource("3_wgpht")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k5bdv"]
+atlas = ExtResource("3_wgpht")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_blk52"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsvtt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c7c7p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k5bdv")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pix76"]
+size = Vector2(62, 48)
+
+[node name="Lever" instance=ExtResource("1_pmgk5")]
+script = ExtResource("2_2ow4f")
+metadata/_edit_vertical_guides_ = [64.0]
+metadata/_edit_horizontal_guides_ = [64.0]
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+position = Vector2(32, 32)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_blk52")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(31, 40)
+shape = SubResource("RectangleShape2D_pix76")
