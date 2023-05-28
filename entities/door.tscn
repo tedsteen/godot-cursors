@@ -51,23 +51,26 @@ script = ExtResource("2_vgnbq")
 metadata/_edit_vertical_guides_ = [64.0]
 metadata/_edit_horizontal_guides_ = [64.0]
 
-[node name="AnimatedSprite2D" parent="." index="0"]
+[node name="HiddenEntityContainer" type="Node2D" parent="." index="0"]
+unique_name_in_owner = true
+
+[node name="AnimatedSprite2D" parent="." index="1"]
 position = Vector2(32, 32)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_82wys")
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="2"]
 position = Vector2(31.5, 34)
 shape = SubResource("RectangleShape2D_lsrlo")
 
-[node name="OpenAudio" type="AudioStreamPlayer2D" parent="." index="2"]
+[node name="OpenAudio" type="AudioStreamPlayer2D" parent="." index="3"]
 unique_name_in_owner = true
 stream = ExtResource("4_t3v1s")
 
-[node name="CloseAudio" type="AudioStreamPlayer2D" parent="." index="3"]
+[node name="CloseAudio" type="AudioStreamPlayer2D" parent="." index="4"]
 unique_name_in_owner = true
 stream = ExtResource("5_vrcnb")
 
-[node name="ClosedClickAudio" type="AudioStreamPlayer2D" parent="." index="4"]
+[node name="ClosedClickAudio" type="AudioStreamPlayer2D" parent="." index="5"]
 unique_name_in_owner = true
 stream = ExtResource("6_u5civ")

@@ -4,6 +4,7 @@ var pot_res = preload("res://entities/pot.tscn")
 var door_res = preload("res://entities/door.tscn")
 var lever_res = preload("res://entities/lever.tscn")
 var gem_res = preload("res://entities/gem.tscn")
+var stairs_up_res = preload("res://entities/stairs_up.tscn")
 
 var rng: RandomNumberGenerator
 
@@ -44,15 +45,26 @@ func generate_map_data(difficulty: int, amount: int):
 		available_entities.append(pot)
 		pots.append(pot)
 
-	var door = door_res.instantiate()
+	var gem: Gem = gem_res.instantiate()
+	gem.add_to_group("gems")
+	available_entities.append(gem)
+
+	var stairs_up: StairsUp = stairs_up_res.instantiate()
+	stairs_up.add_to_group("up_stairs")
+	#available_entities.append(stairs_up)
+
+	var door: Door = door_res.instantiate()
 	door.add_to_group("doors")
 	door.pots = pots
+	door.hidden_entity = stairs_up
 	available_entities.append(door)
-	available_entities.append(gem_res.instantiate())
+	
 	var lever = lever_res.instantiate()
 	lever.door = door
 	lever.add_to_group("levers")
 	available_entities.append(lever)
+	
+	
 	
 	var width = int(background_rect.size.x / CELL_SIZE)
 	var height = int(background_rect.size.y / CELL_SIZE)

@@ -4,10 +4,12 @@ class_name Door
 @onready var open_audio = %OpenAudio
 @onready var close_audio = %CloseAudio
 @onready var closed_click_audio = %ClosedClickAudio
+@onready var hidden_entity_container = %HiddenEntityContainer
 
 var open = false: set = set_open
 var available = false : set = set_available
 var locked = false : set = set_locked
+var hidden_entity: Entity
 
 var pots: Array[Pot] = []
 
@@ -40,8 +42,10 @@ func set_open(p_open: bool):
 		if open:
 			open_audio.play()
 			$AnimatedSprite2D.play("default")
+			hidden_entity_container.add_child(hidden_entity)
 		else:
 			$AnimatedSprite2D.play_backwards("default")
+			hidden_entity_container.remove_child(hidden_entity)
 			await $AnimatedSprite2D.animation_finished
 			close_audio.play()
 
