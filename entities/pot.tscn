@@ -49,7 +49,7 @@ radius = 33.0
 [node name="Pot" instance=ExtResource("1_vxlym")]
 script = ExtResource("2_gv1eb")
 health = 0
-metadata/_edit_vertical_guides_ = [64.0]
+metadata/_edit_vertical_guides_ = [64.0, 32.0]
 metadata/_edit_horizontal_guides_ = [64.0]
 
 [node name="AnimatedSprite2D" parent="." index="0"]
@@ -63,8 +63,9 @@ position = Vector2(32, 39)
 shape = SubResource("CircleShape2D_eljr6")
 
 [node name="Label" type="Label" parent="." index="2"]
+offset_left = 4.0
 offset_right = 64.0
-offset_bottom = 16.0
+offset_bottom = 22.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_i3q7c")

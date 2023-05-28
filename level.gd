@@ -83,19 +83,20 @@ func reset_time(new_map: bool):
 		for entity in get_tree().get_nodes_in_group("entities"):
 			entity.queue_free()
 		
-		generate_map_data(4, 1)
+		generate_map_data(5, 2)
 
 func _physics_process(delta):
 	time += delta
 	if time >= cursor_lifetime:
 		cursors.push_back(current_recording)
 		reset_time(false)
+		return
 
 	for cursor in cursors:
-		var event = cursor.play_frame(frame, self.get_parent().get_node("%Camera2D"))
+		var event = cursor.play_frame(frame)
 		if event: handle_mouse(event)
 	
-	frame += 1
+	
 	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
 	var total_pot_health = 0
 	var remaining_pot_health = 0
@@ -104,7 +105,7 @@ func _physics_process(delta):
 		total_pot_health += pot.start_health
 
 	progress_rect.size.y = background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
-	#print_debug("Time: %f (frame: %d)" % [time, frame])
+	frame += 1
 
 func handle_mouse(event: InputEventMouse):
 	point_params.position = event.position * view_to_world
