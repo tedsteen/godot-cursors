@@ -37,7 +37,6 @@ func set_available(p_available: bool):
 func set_open(p_open: bool):
 	if open != p_open:
 		open = p_open
-		print_debug("OPEN ", open)
 		if open:
 			open_audio.play()
 			$AnimatedSprite2D.play("default")
