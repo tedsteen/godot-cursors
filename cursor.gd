@@ -14,8 +14,8 @@ func play_frame(frame: int, camera: Camera2D) -> InputEventMouse:
 		var curr_frame: InputEventMouse = self.history[frame]
 		self.set_position(camera.make_input_local(curr_frame).position)
 
-		var btn1_pressed = curr_frame.button_mask && 1
-		var texture_scale = cursor_click_size if btn1_pressed else 1.0
+		var left_pressed = curr_frame is InputEventMouseButton and curr_frame.button_index == MouseButton.MOUSE_BUTTON_LEFT
+		var texture_scale = cursor_click_size if left_pressed else 1.0
 
 		self.scale = Vector2(texture_scale, texture_scale)
 		return curr_frame

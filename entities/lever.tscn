@@ -30,11 +30,11 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 5.0
+"speed": 12.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pix76"]
-size = Vector2(62, 48)
+size = Vector2(63, 55)
 
 [node name="Lever" instance=ExtResource("1_pmgk5")]
 script = ExtResource("2_2ow4f")
@@ -47,5 +47,5 @@ scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_blk52")
 
 [node name="CollisionShape2D" parent="." index="1"]
-position = Vector2(31, 40)
+position = Vector2(31.5, 43.5)
 shape = SubResource("RectangleShape2D_pix76")

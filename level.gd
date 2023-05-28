@@ -2,6 +2,7 @@ extends Node2D
 var cursor_res = preload("res://cursor.tscn")
 var pot_res = preload("res://entities/pot.tscn")
 var door_res = preload("res://entities/door.tscn")
+var lever_res = preload("res://entities/lever.tscn")
 var gem_res = preload("res://entities/gem.tscn")
 
 var rng: RandomNumberGenerator
@@ -39,8 +40,14 @@ func generate_map_data(difficulty: int, amount: int):
 		pot.health = rng.randi() % difficulty + 1
 		available_entities.append(pot)
 
-	available_entities.append(door_res.instantiate())
+	var door = door_res.instantiate()
+	door.add_to_group("doors")
+	available_entities.append(door)
 	available_entities.append(gem_res.instantiate())
+	var lever = lever_res.instantiate()
+	lever.door = door
+	lever.add_to_group("levers")
+	available_entities.append(lever)
 	
 	var width = int(background_rect.size.x / CELL_SIZE)
 	var height = int(background_rect.size.y / CELL_SIZE)
@@ -50,7 +57,6 @@ func generate_map_data(difficulty: int, amount: int):
 		return
 	
 	var free_slots: Array = range(0, width * height)
-	var map_data: Array[Dictionary] = []
 	for entity in available_entities:
 		var idx = rng.randi() % free_slots.size()
 		var coord = free_slots[idx]
@@ -72,33 +78,32 @@ func reset_time(new_map: bool):
 		for entity in get_tree().get_nodes_in_group("entities"):
 			entity.queue_free()
 		
-		generate_map_data(100, 10)
+		generate_map_data(400, 2)
 
-func _physics_process(delta):	
+func _physics_process(delta):
 	time += delta
 	if time >= cursor_lifetime:
 		cursors.push_back(current_recording)
-		reset_time(true)
+		reset_time(false)
 
 	for cursor in cursors:
 		var event = cursor.play_frame(frame, self.get_parent().get_node("%Camera2D"))
-		handle_click(event)
+		if event: handle_mouse(event)
 	
 	frame += 1
 	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
 	#print_debug("Time: %f (frame: %d)" % [time, frame])
 
-func handle_click(event: InputEventMouse):
-	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
-		point_params.position = event.position * view_to_world
-		var hits = dss.intersect_point(point_params)
-		
-		for hit in hits:
-			var entity = hit.collider
-			entity.handle_click(event)
+func handle_mouse(event: InputEventMouse):
+	point_params.position = event.position * view_to_world
+	var hits = dss.intersect_point(point_params)
+
+	for hit in hits:
+		var entity = hit.collider
+		entity.handle_mouse(event)
 
 func _input(event):
 	if event is InputEventMouse:
 		current_recording.record_frame(frame, event)
-		handle_click(event)
+		handle_mouse(event)
 	

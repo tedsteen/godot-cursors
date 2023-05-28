@@ -1,5 +1,6 @@
 extends Entity
 class_name Gem
 
-func handle_click(_event: InputEventMouse):
-	queue_free()
+func handle_mouse(event: InputEventMouse):
+	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
+		queue_free()

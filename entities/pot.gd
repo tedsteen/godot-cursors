@@ -10,11 +10,12 @@ class_name Pot
 func _ready():
 	set_health(health)
 
-func handle_click(_event: InputEventMouse):
-	if health > 0:
-		health = health - 1
-		if health <= 0:
-			animated_sprite.play("destroy")
+func handle_mouse(event: InputEventMouse):
+	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
+		if health > 0:
+			health = health - 1
+			if health <= 0:
+				animated_sprite.play("destroy")
 
 func set_health(p_health: int):
 	health = p_health

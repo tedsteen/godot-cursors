@@ -42,7 +42,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_eljr6"]
-radius = 29.0
+radius = 33.0
 
 [node name="Pot" instance=ExtResource("1_vxlym")]
 script = ExtResource("2_gv1eb")
