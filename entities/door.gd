@@ -6,9 +6,17 @@ class_name Door
 @onready var closed_click_audio = %ClosedClickAudio
 
 var open = false: set = set_open
-var available = true : set = set_available
+var available = false : set = set_available
 var locked = false : set = set_locked
 
+var pots: Array[Pot] = []
+
+func _physics_process(delta):
+	var total_pot_health = 0
+	for pot in pots:
+		total_pot_health += pot.health
+	available = total_pot_health == 0
+	
 func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
 		if !open:
@@ -37,3 +45,4 @@ func set_open(p_open: bool):
 			$AnimatedSprite2D.play_backwards("default")
 			await $AnimatedSprite2D.animation_finished
 			close_audio.play()
+

@@ -9,6 +9,7 @@ var rng: RandomNumberGenerator
 
 @onready var background_rect = %BackgroundRect
 @onready var time_rect = %TimeRect
+@onready var progress_rect = %ProgressRect
 @onready var view_to_world = self.get_canvas_transform().affine_inverse()
 @onready var dss: = get_world_2d().direct_space_state
 
@@ -35,13 +36,17 @@ func _ready():
 func generate_map_data(difficulty: int, amount: int):	
 	var available_entities: Array[Entity] = []
 
+	var pots: Array[Pot] = []
 	for i in range(0, amount):
 		var pot: Pot = pot_res.instantiate()
+		pot.add_to_group("pots")
 		pot.health = rng.randi() % difficulty + 1
 		available_entities.append(pot)
+		pots.append(pot)
 
 	var door = door_res.instantiate()
 	door.add_to_group("doors")
+	door.pots = pots
 	available_entities.append(door)
 	available_entities.append(gem_res.instantiate())
 	var lever = lever_res.instantiate()
@@ -78,7 +83,7 @@ func reset_time(new_map: bool):
 		for entity in get_tree().get_nodes_in_group("entities"):
 			entity.queue_free()
 		
-		generate_map_data(400, 2)
+		generate_map_data(4, 1)
 
 func _physics_process(delta):
 	time += delta
@@ -92,6 +97,13 @@ func _physics_process(delta):
 	
 	frame += 1
 	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
+	var total_pot_health = 0
+	var remaining_pot_health = 0
+	for pot in get_tree().get_nodes_in_group("pots"):
+		remaining_pot_health += pot.health
+		total_pot_health += pot.start_health
+
+	progress_rect.size.y = background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
 	#print_debug("Time: %f (frame: %d)" % [time, frame])
 
 func handle_mouse(event: InputEventMouse):
