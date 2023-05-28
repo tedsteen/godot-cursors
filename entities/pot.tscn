@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bms6unent0pud"]
+[gd_scene load_steps=13 format=3 uid="uid://bms6unent0pud"]
 
 [ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_vxlym"]
 [ext_resource type="Script" path="res://entities/pot.gd" id="2_gv1eb"]
 [ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="3_v81ba"]
 [ext_resource type="FontFile" uid="uid://c8br8cqamatr3" path="res://assets/Graph-35-pix.ttf" id="4_i3q7c"]
+[ext_resource type="AudioStream" uid="uid://bf2gyqs1sh1vw" path="res://assets/audio/click.wav" id="5_1bc8p"]
+[ext_resource type="AudioStream" uid="uid://b4yrdcy4s4w48" path="res://assets/audio/pot_break.wav" id="6_uwx4t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7f2rn"]
 atlas = ExtResource("3_v81ba")
@@ -69,3 +71,12 @@ theme_override_fonts/font = ExtResource("4_i3q7c")
 theme_override_font_sizes/font_size = 18
 text = "x99"
 horizontal_alignment = 1
+
+[node name="ClickAudio" type="AudioStreamPlayer2D" parent="." index="3"]
+unique_name_in_owner = true
+stream = ExtResource("5_1bc8p")
+max_polyphony = 5
+
+[node name="BreakAudio" type="AudioStreamPlayer2D" parent="." index="4"]
+unique_name_in_owner = true
+stream = ExtResource("6_uwx4t")

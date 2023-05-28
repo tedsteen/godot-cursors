@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://buvawxeb6kl3a"]
+[gd_scene load_steps=15 format=3 uid="uid://buvawxeb6kl3a"]
 
 [ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_seg1h"]
 [ext_resource type="Script" path="res://entities/gem.gd" id="2_jubiw"]
 [ext_resource type="Texture2D" uid="uid://c6v5aalapweko" path="res://assets/checkpoint.png" id="2_sqbhi"]
+[ext_resource type="AudioStream" uid="uid://b4ajxkwvjklcd" path="res://assets/audio/checkpoint.wav" id="4_gmdhn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oygdx"]
 atlas = ExtResource("2_sqbhi")
@@ -86,3 +87,7 @@ autoplay = "default"
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2(32, 33)
 shape = SubResource("CapsuleShape2D_om8g1")
+
+[node name="CheckpointAudio" type="AudioStreamPlayer2D" parent="." index="2"]
+unique_name_in_owner = true
+stream = ExtResource("4_gmdhn")

@@ -1,6 +1,9 @@
 extends Entity
 
 class_name Lever
+
+@onready var open_audio = %OpenAudio
+
 var door: Door : set = set_door
 var down_btn_counter = 0
 var open = false : set = set_open
@@ -17,6 +20,7 @@ func set_open(p_open: bool):
 	if open != p_open:
 		open = p_open
 		if open:
+			open_audio.play()
 			$AnimatedSprite2D.play("default")
 		else:
 			$AnimatedSprite2D.play_backwards("default")

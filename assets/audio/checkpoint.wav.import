@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://hekmru1puu7a"
-path="res://.godot/imported/door_close.wav-2a2e68ee20a1084999a0079454f26ad1.sample"
+uid="uid://b4ajxkwvjklcd"
+path="res://.godot/imported/checkpoint.wav-1d95640867fc13dc347187d497bb3d46.sample"
 
 [deps]
 
-source_file="res://assets/door_close.wav"
-dest_files=["res://.godot/imported/door_close.wav-2a2e68ee20a1084999a0079454f26ad1.sample"]
+source_file="res://assets/audio/checkpoint.wav"
+dest_files=["res://.godot/imported/checkpoint.wav-1d95640867fc13dc347187d497bb3d46.sample"]
 
 [params]
 

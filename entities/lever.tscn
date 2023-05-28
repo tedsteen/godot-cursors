@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bwewfkpbvqnx6"]
+[gd_scene load_steps=10 format=3 uid="uid://bwewfkpbvqnx6"]
 
 [ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_pmgk5"]
 [ext_resource type="Script" path="res://entities/lever.gd" id="2_2ow4f"]
 [ext_resource type="Texture2D" uid="uid://c342fiimoqs3l" path="res://assets/tiles.png" id="3_wgpht"]
+[ext_resource type="AudioStream" uid="uid://cm0igolno7lf3" path="res://assets/audio/lever_open.wav" id="4_vn77l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lsvtt"]
 atlas = ExtResource("3_wgpht")
@@ -49,3 +50,7 @@ sprite_frames = SubResource("SpriteFrames_blk52")
 [node name="CollisionShape2D" parent="." index="1"]
 position = Vector2(31.5, 43.5)
 shape = SubResource("RectangleShape2D_pix76")
+
+[node name="OpenAudio" type="AudioStreamPlayer2D" parent="." index="2"]
+unique_name_in_owner = true
+stream = ExtResource("4_vn77l")
