@@ -1,10 +1,36 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5ujfd7s0y61c"]
+[gd_scene load_steps=6 format=3 uid="uid://c5ujfd7s0y61c"]
 
 [ext_resource type="Script" path="res://entities/entity.gd" id="1_nws1l"]
+[ext_resource type="Texture2D" uid="uid://bv4vbnt02slxw" path="res://assets/placeholder.svg" id="2_4o0lm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jw1uu"]
+atlas = ExtResource("2_4o0lm")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ljpsp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jw1uu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tepai"]
+size = Vector2(64, 64)
 
 [node name="Entity" type="Area2D"]
 script = ExtResource("1_nws1l")
+metadata/_edit_vertical_guides_ = [64.0]
+metadata/_edit_horizontal_guides_ = [64.0]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(32, 32)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ljpsp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_tepai")

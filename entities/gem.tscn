@@ -79,12 +79,14 @@ metadata/_edit_horizontal_guides_ = [64.0]
 metadata/_edit_vertical_guides_ = [64.0]
 
 [node name="AnimatedSprite2D" parent="." index="0"]
+unique_name_in_owner = false
 position = Vector2(32, 32)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_vinib")
 autoplay = "default"
 
 [node name="CollisionShape2D" parent="." index="1"]
+unique_name_in_owner = false
 position = Vector2(32, 33)
 shape = SubResource("CapsuleShape2D_om8g1")
 

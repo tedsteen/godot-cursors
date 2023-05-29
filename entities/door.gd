@@ -39,13 +39,13 @@ func set_open(p_open: bool):
 		open = p_open
 		if open:
 			open_audio.play()
-			$AnimatedSprite2D.play("default")
+			sprite.play("default")
 			var entity = get_hidden_entity()
 			if entity:
 				hidden_entity_container.add_child(entity)
 		else:
-			$AnimatedSprite2D.play_backwards("default")
-			await $AnimatedSprite2D.animation_finished
+			sprite.play_backwards("default")
+			await sprite.animation_finished
 			var entity = get_hidden_entity()
 			if entity && !entity.is_queued_for_deletion():
 				hidden_entity_container.remove_child(entity)

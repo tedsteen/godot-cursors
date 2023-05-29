@@ -21,9 +21,9 @@ func set_open(p_open: bool):
 		open = p_open
 		if open:
 			open_audio.play()
-			$AnimatedSprite2D.play("default")
+			sprite.play("default")
 		else:
-			$AnimatedSprite2D.play_backwards("default")
+			sprite.play_backwards("default")
 		door.set_locked(!open)
 
 func set_door(p_door: Door):
