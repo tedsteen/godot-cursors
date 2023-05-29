@@ -47,24 +47,22 @@ func generate_map_data(difficulty: int, amount: int):
 
 	var gem: Gem = gem_res.instantiate()
 	gem.add_to_group("gems")
-	available_entities.append(gem)
+	#available_entities.append(gem)
 
 	var stairs_up: StairsUp = stairs_up_res.instantiate()
 	stairs_up.add_to_group("up_stairs")
-	#available_entities.append(stairs_up)
+	available_entities.append(stairs_up)
 
 	var door: Door = door_res.instantiate()
 	door.add_to_group("doors")
 	door.pots = pots
-	door.hidden_entity = stairs_up
+	door.hidden_entity = gem
 	available_entities.append(door)
 	
 	var lever = lever_res.instantiate()
 	lever.door = door
 	lever.add_to_group("levers")
 	available_entities.append(lever)
-	
-	
 	
 	var width = int(background_rect.size.x / CELL_SIZE)
 	var height = int(background_rect.size.y / CELL_SIZE)
@@ -95,7 +93,7 @@ func reset_time(new_map: bool):
 		for entity in get_tree().get_nodes_in_group("entities"):
 			entity.queue_free()
 		
-		generate_map_data(5, 2)
+		generate_map_data(5, 1)
 
 func _physics_process(delta):
 	time += delta
@@ -116,7 +114,7 @@ func _physics_process(delta):
 		remaining_pot_health += pot.health
 		total_pot_health += pot.start_health
 
-	progress_rect.size.y = background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
+	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
 	frame += 1
 
 func handle_mouse(event: InputEventMouse):

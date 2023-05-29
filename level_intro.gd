@@ -1,7 +1,7 @@
 extends Control
 @onready var countdown_label = %CountdownLabel
 var level_scene = preload("res://Level.tscn")
-var time = 4
+@export var time = 4
 
 func _ready():
 	pass # Replace with function body.

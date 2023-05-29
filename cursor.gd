@@ -6,7 +6,6 @@ class_name Cursor
 var history = {}
 
 func record_frame(frame: int, mouse_event: InputEventMouse):
-	#print_debug("record frame %s, %s", mouse_event)
 	self.history[frame] = mouse_event
 
 func play_frame(frame: int) -> InputEventMouse:

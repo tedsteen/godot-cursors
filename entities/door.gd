@@ -9,7 +9,7 @@ class_name Door
 var open = false: set = set_open
 var available = false : set = set_available
 var locked = false : set = set_locked
-var hidden_entity: Entity
+var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
 
 var pots: Array[Pot] = []
 
@@ -23,8 +23,6 @@ func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
 		if !open:
 			closed_click_audio.play()
-		else:
-			print_debug("TODO: goto next level!")
 
 func set_locked(p_locked: bool):
 	if locked != p_locked:
@@ -42,10 +40,19 @@ func set_open(p_open: bool):
 		if open:
 			open_audio.play()
 			$AnimatedSprite2D.play("default")
-			hidden_entity_container.add_child(hidden_entity)
+			var entity = get_hidden_entity()
+			if entity:
+				hidden_entity_container.add_child(entity)
 		else:
 			$AnimatedSprite2D.play_backwards("default")
-			hidden_entity_container.remove_child(hidden_entity)
 			await $AnimatedSprite2D.animation_finished
+			var entity = get_hidden_entity()
+			if entity && !entity.is_queued_for_deletion():
+				hidden_entity_container.remove_child(entity)
 			close_audio.play()
 
+func set_hidden_entity(entity: Entity):
+	hidden_entity = weakref(entity)
+
+func get_hidden_entity() -> Entity:
+	return hidden_entity.get_ref()
