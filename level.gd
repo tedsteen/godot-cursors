@@ -34,36 +34,37 @@ func _ready():
 	cursors = []
 	reset_time(true)
 
+func put_behind_door(entity: Entity) -> Array[Entity]:
+	var door: Door = door_res.instantiate()
+	var lever: Lever = lever_res.instantiate()
+	
+	door.add_to_group("doors")
+	lever.add_to_group("levers")
+	
+	lever.door = door
+	
+	door.hidden_entity = entity
+	return [door, lever]
+
 func generate_map_data(difficulty: int, amount: int):	
 	var available_entities: Array[Entity] = []
 
-	var pots: Array[Pot] = []
 	for i in range(0, amount):
 		var pot: Pot = pot_res.instantiate()
 		pot.add_to_group("pots")
 		pot.health = rng.randi() % difficulty + 1
 		available_entities.append(pot)
-		pots.append(pot)
 
 	var gem: Gem = gem_res.instantiate()
 	gem.add_to_group("gems")
-	available_entities.append(gem)
-
+	#available_entities.append(gem)
+	available_entities.append_array(put_behind_door(gem))
+	
 	var stairs_up: StairsUp = stairs_up_res.instantiate()
 	stairs_up.add_to_group("up_stairs")
 	#available_entities.append(stairs_up)
+	available_entities.append_array(put_behind_door(stairs_up))
 
-	var door: Door = door_res.instantiate()
-	door.add_to_group("doors")
-	door.pots = pots
-	door.hidden_entity = stairs_up
-	available_entities.append(door)
-	
-	var lever = lever_res.instantiate()
-	lever.door = door
-	lever.add_to_group("levers")
-	available_entities.append(lever)
-	
 	var width = int(background_rect.size.x / CELL_SIZE)
 	var height = int(background_rect.size.y / CELL_SIZE)
 

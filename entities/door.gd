@@ -11,8 +11,6 @@ var available = false : set = set_available
 var locked = false : set = set_locked
 var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
 
-var pots: Array[Pot] = []
-
 func _ready():
 	var entity = get_hidden_entity()
 	if entity:
@@ -21,7 +19,7 @@ func _ready():
 
 func _physics_process(delta):
 	var total_pot_health = 0
-	for pot in pots:
+	for pot in get_tree().get_nodes_in_group("pots"):
 		total_pot_health += pot.health
 	available = total_pot_health == 0
 	
