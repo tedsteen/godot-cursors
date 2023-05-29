@@ -47,16 +47,16 @@ func generate_map_data(difficulty: int, amount: int):
 
 	var gem: Gem = gem_res.instantiate()
 	gem.add_to_group("gems")
-	#available_entities.append(gem)
+	available_entities.append(gem)
 
 	var stairs_up: StairsUp = stairs_up_res.instantiate()
 	stairs_up.add_to_group("up_stairs")
-	available_entities.append(stairs_up)
+	#available_entities.append(stairs_up)
 
 	var door: Door = door_res.instantiate()
 	door.add_to_group("doors")
 	door.pots = pots
-	door.hidden_entity = gem
+	door.hidden_entity = stairs_up
 	available_entities.append(door)
 	
 	var lever = lever_res.instantiate()

@@ -5,3 +5,9 @@ class_name Entity
 
 func handle_mouse(_event: InputEventMouse):
 	push_warning("Unhandled mouse on %s" % self)
+
+func disable():
+	collision_shape.disabled = true
+
+func enable():
+	collision_shape.disabled = false
