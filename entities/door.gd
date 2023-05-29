@@ -18,6 +18,7 @@ static func create(lever: Lever, hidden_entity: Entity) -> Door:
 	var door: Door = door_res.instantiate()
 	door.lever = lever
 	door.hidden_entity = hidden_entity
+	hidden_entity.add_to_group("entities")
 	door.add_to_group("doors")
 	return door
 	
@@ -36,9 +37,9 @@ func _physics_process(delta):
 		total_pot_health += pot.health
 	available = total_pot_health == 0
 	
-func handle_mouse(event: InputEventMouse):
-	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
-		if !open: closed_click_audio.play()
+func handle_cursors(cursors: Array[Cursor]):
+	if !open && cursors.any(func(cursor: Cursor): return cursor.left_clicked):
+		closed_click_audio.play()
 
 func set_unlocked(p_unlocked: bool):
 	if unlocked != p_unlocked:

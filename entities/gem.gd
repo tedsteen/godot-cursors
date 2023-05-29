@@ -11,8 +11,8 @@ static func create() -> Gem:
 	gem.add_to_group("gems")
 	return gem
 
-func handle_mouse(event: InputEventMouse):
-	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
+func handle_cursors(cursors: Array[Cursor]):
+	if cursors.any(func(cursor): return cursor.left_clicked):
 		checkpoint_audio.play()
 		disable()
 		destroy_animation.play("destroy")

@@ -12,7 +12,11 @@ static func create(next_level_rng_seed: int) -> StairsUp:
 	stairs_up.add_to_group("up_stairs")
 	return stairs_up
 
-func handle_mouse(event: InputEventMouse):
-	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
-		
+func handle_cursors(cursors: Array[Cursor]):
+	var clicked_cursors = cursors.filter(func(cursor: Cursor): return cursor.left_clicked)
+	if clicked_cursors.size() > 0:
 		next_level_audio.play()
+	for cursor in clicked_cursors:
+		pass
+		#print_debug("TODO: Take cursor to next level ", cursor)
+

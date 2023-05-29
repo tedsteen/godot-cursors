@@ -55,9 +55,22 @@ func _physics_process(delta):
 	if last_mouse_event:
 		current_recording.record_frame(frame, last_mouse_event)
 		last_mouse_event = null
+
+	var ted = {}
+	for entity in get_tree().get_nodes_in_group("entities"):
+		var cursors: Array[Cursor] = []
+		ted[entity] = cursors
 	
 	for cursor in cursors:
-		handle_mouse(cursor, frame)
+		cursor.play_frame(frame)
+		point_params.position = cursor.position * view_to_world
+		var hits = dss.intersect_point(point_params)
+		for hit in hits:
+			var entity = hit.collider
+			ted[entity].append(cursor)
+	
+	for entity in ted:
+		entity.handle_cursors(ted[entity])
 
 	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
 	var total_pot_health = 0
@@ -68,16 +81,6 @@ func _physics_process(delta):
 
 	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
 	frame += 1
-func handle_mouse(cursor: Cursor, frame: int):
-	var event = cursor.play_frame(frame)
-	if event:
-		point_params.position = event.position * view_to_world
-		
-		var hits = dss.intersect_point(point_params)
-
-		for hit in hits:
-			var entity = hit.collider
-			entity.handle_mouse(event)
 
 func _input(event):
 	if event is InputEventMouse:

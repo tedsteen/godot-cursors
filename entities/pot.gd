@@ -21,12 +21,13 @@ static func create(health: int) -> Pot:
 func _ready():
 	set_health(health)
 
-func handle_mouse(event: InputEventMouse):
-	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
-		if health > 0:
+func handle_cursors(cursors: Array[Cursor]):
+	if health > 0:
+		var clicks = cursors.reduce(func(acc, cursor: Cursor): return acc + 1 if cursor.left_clicked else 0, 0)
+		if clicks != 0:
 			click_audio.play()
-			health = health - 1
-			if health <= 0:
+			health = max(0, health - 1)
+			if health == 0:
 				break_audio.play()
 				animated_sprite.play("destroy")
 
