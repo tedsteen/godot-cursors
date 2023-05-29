@@ -20,13 +20,12 @@ var point_params: = PhysicsPointQueryParameters2D.new()
 var curr_level: Level : set = set_curr_level
 
 func _ready():
-	reset_time()
 	point_params.collide_with_areas = true
 	#point_params.collision_mask = 2
 	cursors = []
-
 	curr_level = Level.create(rng_seed, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
-
+	reset_time()
+	
 func set_curr_level(p_level: Level):
 	if curr_level: curr_level.hide()
 	curr_level = p_level
@@ -37,24 +36,28 @@ func reset_time():
 	frame = 0
 	if current_recording: current_recording.show()
 	current_recording = Cursor.create(get_global_mouse_position(), false)
-	add_child(current_recording)
+	cursors.push_front(current_recording)
+	curr_level.add_child(current_recording)
 
 	#if new_map:
 	#	for entity in get_tree().get_nodes_in_group("entities"):
 	#		entity.queue_free()
 	#	
 	#	generate_map_data(5, 1)
+var last_mouse_event: InputEventMouse
 
 func _physics_process(delta):
 	time += delta
 	if time >= cursor_lifetime:
-		cursors.push_back(current_recording)
 		reset_time()
 		return
 
+	if last_mouse_event:
+		current_recording.record_frame(frame, last_mouse_event)
+		last_mouse_event = null
+	
 	for cursor in cursors:
-		var event = cursor.play_frame(frame)
-		if event: handle_mouse(event, false)
+		handle_mouse(cursor, frame)
 
 	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
 	var total_pot_health = 0
@@ -65,16 +68,21 @@ func _physics_process(delta):
 
 	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
 	frame += 1
+func handle_mouse(cursor: Cursor, frame: int):
+	var event = cursor.play_frame(frame)
+	if event:
+		point_params.position = event.position * view_to_world
+		
+		var hits = dss.intersect_point(point_params)
 
-func handle_mouse(event: InputEventMouse, real_mouse: bool):
-	point_params.position = event.position * view_to_world
-	var hits = dss.intersect_point(point_params)
-
-	for hit in hits:
-		var entity = hit.collider
-		entity.handle_mouse(event)
+		for hit in hits:
+			var entity = hit.collider
+			entity.handle_mouse(event)
 
 func _input(event):
 	if event is InputEventMouse:
-		current_recording.record_frame(frame, event)
-		handle_mouse(event, true)
+		# Prioritise clicks
+		if not last_mouse_event is InputEventMouseButton:
+			last_mouse_event = event
+		
+
