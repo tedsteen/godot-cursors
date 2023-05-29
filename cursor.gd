@@ -1,9 +1,16 @@
 extends TextureRect
 class_name Cursor
 
+const cursor_res = preload("res://cursor.tscn")
+
 @export var cursor_click_size = 0.7
 
 var history = {}
+static func create(position: Vector2, visible: bool) -> Cursor:
+	var cursor: Cursor = cursor_res.instantiate()
+	cursor.position = position
+	cursor.visible = visible
+	return cursor
 
 func record_frame(frame: int, mouse_event: InputEventMouse):
 	self.history[frame] = mouse_event

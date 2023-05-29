@@ -1,21 +1,17 @@
 extends Node2D
 class_name Level
 
+const level_res = preload("res://Level.tscn")
+
 var width: int
 var height: int
-const level_res = preload("res://Level.tscn")
-const pot_res = preload("res://entities/pot.tscn")
-const door_res = preload("res://entities/door.tscn")
-const lever_res = preload("res://entities/lever.tscn")
-const gem_res = preload("res://entities/gem.tscn")
-var stairs_up_res = preload("res://entities/stairs_up.tscn")
 
 var rng: RandomNumberGenerator
 
 @export var rng_seed = 1
 
 const CELL_SIZE = 90
-static func create(rng_seed: int, width: int, height: int):
+static func create(rng_seed: int, width: int, height: int) -> Level:
 	var level: Level = level_res.instantiate()
 	level.rng_seed = rng_seed
 	level.width = width
@@ -27,32 +23,23 @@ func _ready():
 	rng.seed = rng_seed
 	generate_map_data(2, 2)
 
-func put_behind_door(lever: Lever, entity: Entity) -> Door:
-	var door: Door = door_res.instantiate()
-	door.lever = lever
-	door.hidden_entity = entity
-	return door
-
 func generate_map_data(difficulty: int, amount: int):	
 	var available_entities: Array[Entity] = []
 
 	for i in range(0, amount):
-		var pot: Pot = pot_res.instantiate()
-		pot.health = rng.randi() % difficulty + 1
-		available_entities.append(pot)
+		available_entities.append(Pot.create(rng.randi() % difficulty + 1))
 	
-	var lever: Lever = lever_res.instantiate()
+	var lever: Lever = Lever.create()
 	available_entities.append(lever)
 	for i in range(0, 3):
-		var gem: Gem = gem_res.instantiate()
+		var gem: Gem = Gem.create()
 		available_entities.append(gem)
-		#available_entities.append(put_behind_door(lever, gem))
+		#available_entities.append(Door.create(lever, gem))
 	
-	var stairs_up: StairsUp = stairs_up_res.instantiate()
-	stairs_up.next_level_rng_seed = rng.randi()
+	var stairs_up: StairsUp = StairsUp.create(rng.randi())
 	
 	#available_entities.append(stairs_up)
-	available_entities.append(put_behind_door(lever, stairs_up))
+	available_entities.append(Door.create(lever, stairs_up))
 
 	if available_entities.size() > width * height:
 		push_error("Can't fit content on map.")

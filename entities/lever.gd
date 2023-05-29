@@ -2,6 +2,8 @@ extends Entity
 
 class_name Lever
 
+const lever_res = preload("res://entities/lever.tscn")
+
 @onready var open_audio = %OpenAudio
 
 var down_btn_counter = 0
@@ -9,8 +11,10 @@ var is_pulled = false : set = set_is_pulled
 
 signal pulled(pulled: bool)
 
-func _ready():
-	add_to_group("levers")
+static func create() -> Lever:
+	var lever = lever_res.instantiate()
+	lever.add_to_group("levers")
+	return lever	
 
 func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton and event.button_index == MouseButton.MOUSE_BUTTON_LEFT:

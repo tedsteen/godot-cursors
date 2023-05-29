@@ -1,6 +1,8 @@
 extends Entity
 class_name Door
 
+const door_res = preload("res://entities/door.tscn")
+
 @onready var open_audio = %OpenAudio
 @onready var close_audio = %CloseAudio
 @onready var closed_click_audio = %ClosedClickAudio
@@ -12,8 +14,14 @@ var unlocked = true : set = set_unlocked
 var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
 var lever: Lever
 
+static func create(lever: Lever, hidden_entity: Entity) -> Door:
+	var door: Door = door_res.instantiate()
+	door.lever = lever
+	door.hidden_entity = hidden_entity
+	door.add_to_group("doors")
+	return door
+	
 func _ready():
-	add_to_group("doors")
 	var entity = get_hidden_entity()
 	if entity:
 		hidden_entity_container.add_child(entity)

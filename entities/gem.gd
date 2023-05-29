@@ -1,11 +1,15 @@
 extends Entity
 class_name Gem
 
+const gem_res = preload("res://entities/gem.tscn")
+
 @onready var checkpoint_audio = %CheckpointAudio
 @onready var destroy_animation = %Animation
-		
-func _ready():
-	add_to_group("gems")
+
+static func create() -> Gem:
+	var gem: Gem = gem_res.instantiate()
+	gem.add_to_group("gems")
+	return gem
 
 func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:

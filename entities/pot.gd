@@ -2,6 +2,8 @@ extends Entity
 
 class_name Pot
 
+const pot_res = preload("res://entities/pot.tscn")
+
 @onready var label = $Label
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var click_audio = %ClickAudio
@@ -9,10 +11,15 @@ class_name Pot
 @export var health: int : set = set_health
 var start_health: int
 
+static func create(health: int) -> Pot:
+	var pot = pot_res.instantiate()
+	pot.health = health
+	pot.start_health = health
+	pot.add_to_group("pots")
+	return pot
+
 func _ready():
 	set_health(health)
-	start_health = health
-	add_to_group("pots")
 
 func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:

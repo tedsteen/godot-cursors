@@ -1,8 +1,6 @@
 extends Node2D
 class_name Dungeon
 
-var cursor_res = preload("res://cursor.tscn")
-
 @export var rng_seed = 0
 @export var cursor_lifetime = 5
 
@@ -38,9 +36,7 @@ func reset_time():
 	time = 0
 	frame = 0
 	if current_recording: current_recording.show()
-	current_recording = cursor_res.instantiate()
-	current_recording.position = get_global_mouse_position()
-	current_recording.hide()
+	current_recording = Cursor.create(get_global_mouse_position(), false)
 	add_child(current_recording)
 
 	#if new_map:
