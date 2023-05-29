@@ -1,38 +1,31 @@
 extends Node2D
-var cursor_res = preload("res://cursor.tscn")
-var pot_res = preload("res://entities/pot.tscn")
-var door_res = preload("res://entities/door.tscn")
-var lever_res = preload("res://entities/lever.tscn")
-var gem_res = preload("res://entities/gem.tscn")
+class_name Level
+
+var width: int
+var height: int
+const level_res = preload("res://Level.tscn")
+const pot_res = preload("res://entities/pot.tscn")
+const door_res = preload("res://entities/door.tscn")
+const lever_res = preload("res://entities/lever.tscn")
+const gem_res = preload("res://entities/gem.tscn")
 var stairs_up_res = preload("res://entities/stairs_up.tscn")
 
 var rng: RandomNumberGenerator
 
-@onready var background_rect = %BackgroundRect
-@onready var time_rect = %TimeRect
-@onready var progress_rect = %ProgressRect
-@onready var view_to_world = self.get_canvas_transform().affine_inverse()
-@onready var dss: = get_world_2d().direct_space_state
-
-@export var cursor_lifetime = 5
-@export var map_seed = 1
-
-var time
-var frame
-var current_recording: Cursor
-var cursors: Array[Cursor]
-
-var point_params: = PhysicsPointQueryParameters2D.new()
+@export var rng_seed = 1
 
 const CELL_SIZE = 90
-
+static func create(rng_seed: int, width: int, height: int):
+	var level: Level = level_res.instantiate()
+	level.rng_seed = rng_seed
+	level.width = width
+	level.height = height
+	return level
+	
 func _ready():
 	rng = RandomNumberGenerator.new()
-	rng.seed = map_seed
-	point_params.collide_with_areas = true
-	#point_params.collision_mask = 2
-	cursors = []
-	reset_time(true)
+	rng.seed = rng_seed
+	generate_map_data(2, 2)
 
 func put_behind_door(lever: Lever, entity: Entity) -> Door:
 	var door: Door = door_res.instantiate()
@@ -56,11 +49,10 @@ func generate_map_data(difficulty: int, amount: int):
 		#available_entities.append(put_behind_door(lever, gem))
 	
 	var stairs_up: StairsUp = stairs_up_res.instantiate()
+	stairs_up.next_level_rng_seed = rng.randi()
+	
 	#available_entities.append(stairs_up)
 	available_entities.append(put_behind_door(lever, stairs_up))
-
-	var width = int(background_rect.size.x / CELL_SIZE)
-	var height = int(background_rect.size.y / CELL_SIZE)
 
 	if available_entities.size() > width * height:
 		push_error("Can't fit content on map.")
@@ -75,53 +67,3 @@ func generate_map_data(difficulty: int, amount: int):
 		add_child(entity)
 		free_slots.remove_at(idx)
 
-func reset_time(new_map: bool):
-	time = 0
-	frame = 0
-	if current_recording: current_recording.show()
-	current_recording = cursor_res.instantiate()
-	current_recording.position = get_global_mouse_position()
-	current_recording.hide()
-	add_child(current_recording)
-
-	if new_map:
-		for entity in get_tree().get_nodes_in_group("entities"):
-			entity.queue_free()
-		
-		generate_map_data(5, 1)
-
-func _physics_process(delta):
-	time += delta
-	if time >= cursor_lifetime:
-		cursors.push_back(current_recording)
-		reset_time(false)
-		return
-
-	for cursor in cursors:
-		var event = cursor.play_frame(frame)
-		if event: handle_mouse(event)
-	
-	
-	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
-	var total_pot_health = 0
-	var remaining_pot_health = 0
-	for pot in get_tree().get_nodes_in_group("pots"):
-		remaining_pot_health += pot.health
-		total_pot_health += pot.start_health
-
-	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
-	frame += 1
-
-func handle_mouse(event: InputEventMouse):
-	point_params.position = event.position * view_to_world
-	var hits = dss.intersect_point(point_params)
-
-	for hit in hits:
-		var entity = hit.collider
-		entity.handle_mouse(event)
-
-func _input(event):
-	if event is InputEventMouse:
-		current_recording.record_frame(frame, event)
-		handle_mouse(event)
-	

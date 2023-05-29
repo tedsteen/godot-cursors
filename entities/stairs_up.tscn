@@ -25,6 +25,7 @@ size = Vector2(72, 73)
 
 [node name="StairsUp" instance=ExtResource("1_n68xb")]
 script = ExtResource("2_vxw48")
+next_level_rng_seed = null
 
 [node name="AnimatedSprite2D" parent="." index="0"]
 scale = Vector2(4, 4)

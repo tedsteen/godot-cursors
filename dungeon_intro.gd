@@ -1,14 +1,16 @@
 extends Control
+class_name DungeonIntro
 @onready var countdown_label = %CountdownLabel
-var level_scene = preload("res://Level.tscn")
+var dungeon: Dungeon
 @export var time = 4
 
 func _ready():
-	pass # Replace with function body.
+	print_debug("Ready in intro!")
 
 func _process(delta):
 	time -= delta
 	countdown_label.text = "%d" % int(time)
 	if time <= 0:
-		get_tree().change_scene_to_file("res://Level.tscn")
+		queue_free()
+		get_tree().get_root().add_child(dungeon)
 	pass
