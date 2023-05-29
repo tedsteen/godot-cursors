@@ -3,6 +3,9 @@ class_name Gem
 
 @onready var checkpoint_audio = %CheckpointAudio
 
+func _ready():
+	add_to_group("gems")
+
 func handle_mouse(event: InputEventMouse):
 	if checkpoint_audio.has_stream_playback(): return
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:

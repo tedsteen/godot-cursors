@@ -9,6 +9,9 @@ var is_pulled = false : set = set_is_pulled
 
 signal pulled(pulled: bool)
 
+func _ready():
+	add_to_group("levers")
+
 func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton and event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
 		if event.pressed:

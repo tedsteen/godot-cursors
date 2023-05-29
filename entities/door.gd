@@ -13,6 +13,7 @@ var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
 var lever: Lever
 
 func _ready():
+	add_to_group("doors")
 	var entity = get_hidden_entity()
 	if entity:
 		hidden_entity_container.add_child(entity)

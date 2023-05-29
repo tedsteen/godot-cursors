@@ -12,6 +12,7 @@ var start_health: int
 func _ready():
 	set_health(health)
 	start_health = health
+	add_to_group("pots")
 
 func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
