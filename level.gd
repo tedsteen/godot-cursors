@@ -50,10 +50,10 @@ func generate_map_data(difficulty: int, amount: int):
 	
 	var lever: Lever = lever_res.instantiate()
 	available_entities.append(lever)
-	
-	var gem: Gem = gem_res.instantiate()
-	#available_entities.append(gem)
-	available_entities.append(put_behind_door(lever, gem))
+	for i in range(0, 3):
+		var gem: Gem = gem_res.instantiate()
+		available_entities.append(gem)
+		#available_entities.append(put_behind_door(lever, gem))
 	
 	var stairs_up: StairsUp = stairs_up_res.instantiate()
 	#available_entities.append(stairs_up)

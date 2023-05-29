@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://buvawxeb6kl3a"]
+[gd_scene load_steps=17 format=3 uid="uid://buvawxeb6kl3a"]
 
 [ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_seg1h"]
 [ext_resource type="Script" path="res://entities/gem.gd" id="2_jubiw"]
@@ -73,23 +73,56 @@ animations = [{
 radius = 26.0
 height = 78.0
 
+[sub_resource type="Animation" id="Animation_us07s"]
+resource_name = "destroy"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(4, 4), Vector2(40, 40)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3l4a5"]
+_data = {
+"destroy": SubResource("Animation_us07s")
+}
+
 [node name="Gem" instance=ExtResource("1_seg1h")]
 script = ExtResource("2_jubiw")
-metadata/_edit_horizontal_guides_ = [64.0]
-metadata/_edit_vertical_guides_ = [64.0]
 
 [node name="AnimatedSprite2D" parent="." index="0"]
-unique_name_in_owner = false
-position = Vector2(32, 32)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_vinib")
 autoplay = "default"
 
 [node name="CollisionShape2D" parent="." index="1"]
-unique_name_in_owner = false
 position = Vector2(32, 33)
 shape = SubResource("CapsuleShape2D_om8g1")
 
 [node name="CheckpointAudio" type="AudioStreamPlayer2D" parent="." index="2"]
 unique_name_in_owner = true
 stream = ExtResource("4_gmdhn")
+
+[node name="Animation" type="AnimationPlayer" parent="." index="3"]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_3l4a5")
+}
