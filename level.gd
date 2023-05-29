@@ -41,8 +41,8 @@ func put_behind_door(entity: Entity) -> Array[Entity]:
 	door.add_to_group("doors")
 	lever.add_to_group("levers")
 	
-	lever.door = door
-	
+	door.lever = lever
+
 	door.hidden_entity = entity
 	return [door, lever]
 

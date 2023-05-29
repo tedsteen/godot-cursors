@@ -8,14 +8,18 @@ class_name Door
 
 var open = false: set = set_open
 var available = false : set = set_available
-var locked = false : set = set_locked
+var unlocked = true : set = set_unlocked
 var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
+var lever: Lever
 
 func _ready():
 	var entity = get_hidden_entity()
 	if entity:
 		hidden_entity_container.add_child(entity)
 		entity.disable()
+	if lever:
+		lever.pulled.connect(set_unlocked)
+		set_unlocked(false)
 
 func _physics_process(delta):
 	var total_pot_health = 0
@@ -27,15 +31,15 @@ func handle_mouse(event: InputEventMouse):
 	if event is InputEventMouseButton && event.button_index == 1 && event.pressed:
 		if !open: closed_click_audio.play()
 
-func set_locked(p_locked: bool):
-	if locked != p_locked:
-		locked = p_locked
-		set_open(available && !locked)
+func set_unlocked(p_unlocked: bool):
+	if unlocked != p_unlocked:
+		unlocked = p_unlocked
+		set_open(available && unlocked)
 
 func set_available(p_available: bool):
 	if available != p_available:
 		available = p_available
-		set_open(available && !locked)
+		set_open(available && unlocked)
 
 func set_open(p_open: bool):
 	if open != p_open:
