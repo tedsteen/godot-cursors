@@ -12,32 +12,46 @@ class_name Dungeon
 
 var time
 var frame
+var rng: RandomNumberGenerator
 var current_recording: Cursor
 var cursors: Array[Cursor]
 
 var point_params: = PhysicsPointQueryParameters2D.new()
 
-var curr_level: Level : set = set_curr_level
+var levels: Array[Level] = []
 
-func _ready():
+func _ready():	
+	rng = RandomNumberGenerator.new()
+	rng.seed = rng_seed
 	point_params.collide_with_areas = true
 	#point_params.collision_mask = 2
 	cursors = []
-	curr_level = Level.create(rng_seed, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
+	var level1 = Level.create(0, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
+	levels.append(level1)
+	add_child(level1)
 	reset_time()
-	
-func set_curr_level(p_level: Level):
-	if curr_level: curr_level.hide()
-	curr_level = p_level
-	add_child(p_level)
-	
+
+#func set_curr_level(p_level: Level):
+#	if curr_level: curr_level.hide()
+#	curr_level = p_level
+#	add_child(p_level)
+
+func get_next_level(p_level: Level) -> Level:
+	var curr_index = levels.find(p_level)
+	if levels.size() <= curr_index +1:
+		print_debug("Need a new level")	
+	return p_level
+
+func goto_next_level(cursor: Cursor):
+	print_debug("TODO: Goto next level!! ", cursor)
+
 func reset_time():
 	time = 0
 	frame = 0
 	if current_recording: current_recording.show()
-	current_recording = Cursor.create(get_global_mouse_position(), false)
-	cursors.push_front(current_recording)
-	curr_level.add_child(current_recording)
+	current_recording = Cursor.create(levels[0], get_global_mouse_position(), goto_next_level)
+	current_recording.hide()
+	cursors.append(current_recording)
 
 	#if new_map:
 	#	for entity in get_tree().get_nodes_in_group("entities"):
@@ -58,8 +72,8 @@ func _physics_process(delta):
 
 	var cursors_per_entity = {}
 	for entity in get_tree().get_nodes_in_group("entities"):
-		var cursors: Array[Cursor] = []
-		cursors_per_entity[entity] = cursors
+		var cs: Array[Cursor] = []
+		cursors_per_entity[entity] = cs
 	
 	for cursor in cursors:
 		cursor.play_frame(frame)

@@ -11,11 +11,11 @@ var rng: RandomNumberGenerator
 @export var rng_seed = 1
 
 const CELL_SIZE = 90
-static func create(rng_seed: int, width: int, height: int) -> Level:
+static func create(p_rng_seed: int, p_width: int, p_height: int) -> Level:
 	var level: Level = level_res.instantiate()
-	level.rng_seed = rng_seed
-	level.width = width
-	level.height = height
+	level.rng_seed = p_rng_seed
+	level.width = p_width
+	level.height = p_height
 	return level
 	
 func _ready():
@@ -36,7 +36,7 @@ func generate_map_data(difficulty: int, amount: int):
 		available_entities.append(gem)
 		#available_entities.append(Door.create(lever, gem))
 	
-	var stairs_up: StairsUp = StairsUp.create(rng.randi())
+	var stairs_up: StairsUp = StairsUp.create()
 	
 	#available_entities.append(stairs_up)
 	available_entities.append(Door.create(lever, stairs_up))

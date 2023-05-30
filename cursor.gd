@@ -8,11 +8,15 @@ const cursor_res = preload("res://cursor.tscn")
 var history = {}
 var left_pressed = false
 var left_clicked = false
+var level: Level
+var _goto_next_level: Callable
 
-static func create(position: Vector2, visible: bool) -> Cursor:
+static func create(p_level: Level, p_position: Vector2, p_goto_next_level: Callable) -> Cursor:
 	var cursor: Cursor = cursor_res.instantiate()
-	cursor.position = position
-	cursor.visible = visible
+	cursor.level = p_level
+	cursor.position = p_position
+	cursor._goto_next_level = p_goto_next_level
+	cursor.level.add_child(cursor)
 	return cursor
 
 func record_frame(frame: int, mouse_event: InputEventMouse):
@@ -31,3 +35,6 @@ func play_frame(frame: int):
 		self.scale = Vector2(texture_scale, texture_scale)
 		return
 	left_clicked = false
+
+func goto_next_level():
+	_goto_next_level.call(self)
