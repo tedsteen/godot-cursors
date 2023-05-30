@@ -3,7 +3,6 @@
 [sub_resource type="GDScript" id="GDScript_s6kj2"]
 script/source = "extends Node2D
 var dungeon_res = preload(\"res://dungeon.tscn\")
-var dungeon_intro_res = preload(\"res://dungeon_intro.tscn\")
 
 #func _input(event):
 #	if event is InputEventMouse:
@@ -19,12 +18,9 @@ var dungeon_intro_res = preload(\"res://dungeon_intro.tscn\")
 
 
 func _on_button_pressed():
-	var intro: DungeonIntro = dungeon_intro_res.instantiate()
 	var dungeon: Dungeon = dungeon_res.instantiate()
 	dungeon.rng_seed = 1
-	intro.time = 0
-	intro.dungeon = dungeon
-	get_tree().get_root().add_child.call_deferred(intro)
+	get_tree().get_root().add_child.call_deferred(dungeon)
 	queue_free()
 "
 
