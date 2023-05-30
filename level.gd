@@ -8,36 +8,29 @@ var height: int
 var rng: RandomNumberGenerator
 
 var total_pot_health: int
-var curr_pot_health: int : set = set_curr_pot_health
-
-@export var rng_seed = 1
-
-signal pots_cleared(is_cleared: bool)
+var curr_pot_health: int
 
 const CELL_SIZE = 90
-static func create(p_rng_seed: int, p_width: int, p_height: int) -> Level:
+static func create(p_rng: RandomNumberGenerator, p_width: int, p_height: int) -> Level:
 	var level: Level = level_res.instantiate()
-	level.rng_seed = p_rng_seed
+	level.rng = p_rng
 	level.width = p_width
 	level.height = p_height
 	return level
 	
 func _ready():
-	rng = RandomNumberGenerator.new()
-	rng.seed = rng_seed
 	generate_map_data(2, 2)
 	total_pot_health = count_pot_health()
+
+func set_active(p_active: bool):
+	self.visible = p_active
+	#TODO: Mute everything on this level if !active
 
 func count_pot_health() -> int:
 	var total_pot_health = 0
 	for pot in get_nodes_in_group("pots"):
 		total_pot_health += pot.health
 	return total_pot_health
-
-func set_curr_pot_health(new_health: int):
-	if curr_pot_health != new_health:
-		curr_pot_health = new_health
-		if curr_pot_health == 0: pots_cleared.emit(true)
 
 func _physics_process(_delta):
 	curr_pot_health = count_pot_health()
@@ -56,8 +49,8 @@ func generate_map_data(difficulty: int, amount: int):
 	for i in range(0, amount):
 		available_entities.append(Pot.create(rng.randi() % difficulty + 1))
 	
-	#var lever: Lever = Lever.create()
-	#available_entities.append(lever)
+	var lever: Lever = Lever.create()
+	available_entities.append(lever)
 	for i in range(0, 1):
 		var gem: Gem = Gem.create()
 		available_entities.append(gem)
@@ -65,7 +58,7 @@ func generate_map_data(difficulty: int, amount: int):
 	
 	var stairs_up: StairsUp = StairsUp.create()
 	#available_entities.append(stairs_up)
-	available_entities.append(Door.create(stairs_up, pots_cleared))
+	available_entities.append(Door.create(stairs_up, func(): return curr_pot_health == 0 && lever.is_pulled))
 
 	if available_entities.size() > width * height:
 		push_error("Can't fit content on map.")

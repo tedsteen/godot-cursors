@@ -11,3 +11,6 @@ func disable():
 
 func enable():
 	collision_shape.disabled = false
+
+func mute_audio(mute: bool):
+	print_debug("TODO: Mute audio for ", self, mute)

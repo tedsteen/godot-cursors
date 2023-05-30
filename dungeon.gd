@@ -2,6 +2,7 @@ extends Node2D
 class_name Dungeon
 
 const dungeon_intro_res = preload("res://dungeon_intro.tscn")
+const dungeon_res = preload("res://dungeon.tscn")
 
 @export var rng_seed = 0
 @export var cursor_lifetime = 15
@@ -14,16 +15,18 @@ const dungeon_intro_res = preload("res://dungeon_intro.tscn")
 
 var time
 var frame
-var rng: RandomNumberGenerator
 var current_recording: Cursor
+var levels: Array[Level] = []
+var rng: RandomNumberGenerator
 
 var point_params: = PhysicsPointQueryParameters2D.new()
 
-var levels: Array[Level] = []
+static func create(p_rng_seed: int) -> Dungeon:
+	var dungeon = dungeon_res.instantiate()
+	dungeon.rng_seed = p_rng_seed
+	return dungeon
 
 func _ready():
-	rng = RandomNumberGenerator.new()
-	rng.seed = rng_seed
 	point_params.collide_with_areas = true
 	#point_params.collision_mask = 2
 	reset_time()
@@ -31,19 +34,18 @@ func _ready():
 func get_next_level(p_level: Level) -> Level:
 	var curr_index = levels.find(p_level)
 	if levels.size() <= curr_index + 1:
-		var level = Level.create(curr_index + 1, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
+		var level = Level.create(rng, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
 		level.hide()
 		levels.append(level)
 		add_child(level)
 	return levels[curr_index + 1]
 
 func goto_next_level(cursor: Cursor):
-	print_debug("Goto next level!", cursor)
 	var next_level: Level = get_next_level(cursor.level)
 	
 	if cursor == current_recording:
-		cursor.level.hide()
-		next_level.show()
+		cursor.level.set_active(false)
+		next_level.set_active(true)
 	
 	cursor.level = next_level
 
@@ -54,13 +56,15 @@ func reset_time():
 		level.queue_free()
 	levels = []
 	
-	var level1 = Level.create(0, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
-	levels.append(level1)
-	add_child(level1)
-
 	if current_recording:
 		current_recording.show()
-		current_recording.level.hide()
+
+	rng = RandomNumberGenerator.new()
+	rng.seed = rng_seed
+
+	var level1 = Level.create(rng, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
+	levels.append(level1)
+	add_child(level1)
 
 	for cursor in get_tree().get_nodes_in_group("cursors"):
 		cursor.level = level1

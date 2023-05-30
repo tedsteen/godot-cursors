@@ -9,16 +9,15 @@ const door_res = preload("res://entities/door.tscn")
 @onready var hidden_entity_container = %HiddenEntityContainer
 
 var open = false: set = set_open
-var lock_signal: Signal
+var unlock_condition: Callable
 #var available = false : set = set_available
 #var unlocked = true : set = set_unlocked
 var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
 #var lever: Lever
 
-static func create(p_hidden_entity: Entity, p_lock_signal: Signal, p_lever: Lever = null) -> Door:
+static func create(p_hidden_entity: Entity, p_unlock_condition: Callable) -> Door:
 	var door: Door = door_res.instantiate()
-	door.lock_signal = p_lock_signal
-	#door.lever = p_lever
+	door.unlock_condition = p_unlock_condition
 	door.hidden_entity = p_hidden_entity
 	p_hidden_entity.add_to_group("entities")
 	door.add_to_group("doors")
@@ -29,10 +28,10 @@ func _ready():
 	if entity:
 		hidden_entity_container.add_child(entity)
 		entity.disable()
-	
-	lock_signal.connect(set_open)
 
-#func _physics_process(_delta):
+func _physics_process(_delta):
+	open = unlock_condition.call()
+		
 #	var total_pot_health = 0
 #	for pot in get_tree().get_nodes_in_group("pots"):
 #		total_pot_health += pot.health
