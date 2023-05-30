@@ -56,10 +56,10 @@ func _physics_process(delta):
 		current_recording.record_frame(frame, last_mouse_event)
 		last_mouse_event = null
 
-	var ted = {}
+	var cursors_per_entity = {}
 	for entity in get_tree().get_nodes_in_group("entities"):
 		var cursors: Array[Cursor] = []
-		ted[entity] = cursors
+		cursors_per_entity[entity] = cursors
 	
 	for cursor in cursors:
 		cursor.play_frame(frame)
@@ -67,10 +67,10 @@ func _physics_process(delta):
 		var hits = dss.intersect_point(point_params)
 		for hit in hits:
 			var entity = hit.collider
-			ted[entity].append(cursor)
+			cursors_per_entity[entity].append(cursor)
 	
-	for entity in ted:
-		entity.handle_cursors(ted[entity])
+	for entity in cursors_per_entity:
+		entity.handle_cursors(cursors_per_entity[entity])
 
 	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
 	var total_pot_health = 0
