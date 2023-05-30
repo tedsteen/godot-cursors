@@ -4,7 +4,7 @@ class_name Entity
 @onready var collision_shape = $CollisionShape2D
 
 func handle_cursors(cursors: Array[Cursor]):
-	push_warning("Unhandled cursors on %s" % self)
+	push_warning("Unhandled cursors on %s (%s)" % [self, cursors])
 
 func disable():
 	collision_shape.disabled = true

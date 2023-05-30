@@ -11,10 +11,10 @@ const pot_res = preload("res://entities/pot.tscn")
 @export var health: int : set = set_health
 var start_health: int
 
-static func create(health: int) -> Pot:
+static func create(p_health: int) -> Pot:
 	var pot = pot_res.instantiate()
-	pot.health = health
-	pot.start_health = health
+	pot.health = p_health
+	pot.start_health = p_health
 	pot.add_to_group("pots")
 	return pot
 

@@ -14,11 +14,11 @@ var unlocked = true : set = set_unlocked
 var hidden_entity : set = set_hidden_entity, get = get_hidden_entity
 var lever: Lever
 
-static func create(lever: Lever, hidden_entity: Entity) -> Door:
+static func create(p_lever: Lever, p_hidden_entity: Entity) -> Door:
 	var door: Door = door_res.instantiate()
-	door.lever = lever
-	door.hidden_entity = hidden_entity
-	hidden_entity.add_to_group("entities")
+	door.lever = p_lever
+	door.hidden_entity = p_hidden_entity
+	p_hidden_entity.add_to_group("entities")
 	door.add_to_group("doors")
 	return door
 	
@@ -31,7 +31,7 @@ func _ready():
 		lever.pulled.connect(set_unlocked)
 		set_unlocked(false)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	var total_pot_health = 0
 	for pot in get_tree().get_nodes_in_group("pots"):
 		total_pot_health += pot.health
@@ -44,12 +44,12 @@ func handle_cursors(cursors: Array[Cursor]):
 func set_unlocked(p_unlocked: bool):
 	if unlocked != p_unlocked:
 		unlocked = p_unlocked
-		set_open(available && unlocked)
+		open = available && unlocked
 
 func set_available(p_available: bool):
 	if available != p_available:
 		available = p_available
-		set_open(available && unlocked)
+		open = available && unlocked
 
 func set_open(p_open: bool):
 	if open != p_open:
