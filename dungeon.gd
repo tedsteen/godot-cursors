@@ -34,7 +34,7 @@ func _ready():
 func get_next_level(p_level: Level) -> Level:
 	var curr_index = levels.find(p_level)
 	if levels.size() <= curr_index + 1:
-		var level = Level.create(rng, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE))
+		var level = Level.create(rng, int(background_rect.size.x / Level.CELL_SIZE), int(background_rect.size.y / Level.CELL_SIZE), curr_index + 1)
 		level.hide()
 		levels.append(level)
 		add_child(level)

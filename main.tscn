@@ -17,7 +17,7 @@ script/source = "extends Node2D
 
 
 func _on_button_pressed():
-	var dungeon: Dungeon = Dungeon.create(9)
+	var dungeon: Dungeon = Dungeon.create(1)
 	
 	get_tree().get_root().add_child.call_deferred(dungeon)
 	queue_free()
