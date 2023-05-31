@@ -7,8 +7,6 @@ const CELL_SIZE = 90
 
 @onready var background_rect = $"."
 @onready var time_rect = %TimeRect
-@onready var view_to_world = self.get_canvas_transform().affine_inverse()
-@onready var dss: = get_world_2d().direct_space_state
 
 var frame = 0
 var rng_seed: int
@@ -19,7 +17,6 @@ var levels: Array[Level] = []
 var cursors: Array
 var rng: RandomNumberGenerator
 var last_mouse_event: InputEventMouse
-var point_params: = PhysicsPointQueryParameters2D.new()
 
 static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = []) -> Dungeon:
 	var dungeon = dungeon_res.instantiate()
@@ -29,10 +26,8 @@ static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = [
 	return dungeon
 
 func _ready():
-
 	rng = RandomNumberGenerator.new()
 	rng.seed = rng_seed
-	point_params.collide_with_areas = true
 
 	var level1 = Level.create(rng)
 	generate_map_data(level1, 0)
@@ -85,24 +80,6 @@ func _physics_process(_delta):
 		current_recording.record_frame(frame, last_mouse_event)
 		last_mouse_event = null
 
-	for level in levels:
-		var cursors_per_entity = {}
-		for entity in level.get_nodes_in_group("entities"):
-			var cs: Array[Cursor] = []
-			cursors_per_entity[entity] = cs
-
-		for cursor in cursors:
-			cursor.play_frame(frame)
-			point_params.position = cursor.position * view_to_world
-			var hits = dss.intersect_point(point_params)
-			for hit in hits:
-				var entity = hit.collider
-				if level.has_entity(entity):
-					cursors_per_entity[entity].append(cursor)
-		
-		for entity in cursors_per_entity:
-			entity.handle_cursors(cursors_per_entity[entity])
-
 	time_rect.size.y = background_rect.size.y * (1 - frame / float(cursor_lifetime * Engine.physics_ticks_per_second))
 
 	frame += 1
@@ -137,6 +114,7 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 	else:
 		door_unlock_condition = func(): return level.curr_pot_health == 0
 
+	level.entities.append(stairs_up) #TODO: could this be done in a better way?
 	available_entities.append(Door.create(stairs_up, door_unlock_condition))
 	
 	var free_slots: Array = range(0, grid_size.x * grid_size.y)
@@ -146,7 +124,7 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 		var y = static_entity.position.y
 		var idx = x + y * grid_size.x
 		static_entity.add_to_group("entities")
-		level.add_child(static_entity)
+		level.add_entity(static_entity)
 		free_slots.remove_at(idx)
 		
 	if available_entities.size() > free_slots.size():
@@ -159,5 +137,5 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 		entity.position = Vector2((coord % int(grid_size.x)) * CELL_SIZE, int(coord / float(grid_size.x)) * CELL_SIZE)
 		entity.add_to_group("entities")
 
-		level.add_child(entity)
+		level.add_entity(entity)
 		free_slots.remove_at(idx)

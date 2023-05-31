@@ -3,13 +3,17 @@ class_name Level
 
 @onready var background_rect = $"."
 @onready var progress_rect = %ProgressRect
+@onready var view_to_world = self.get_canvas_transform().affine_inverse()
+@onready var dss: = get_world_2d().direct_space_state
 
 const level_res = preload("res://Level.tscn")
 
+var point_params: = PhysicsPointQueryParameters2D.new()
 var rng: RandomNumberGenerator
-
+var frame
 var total_pot_health: int
 var curr_pot_health: int
+var entities: Array[Entity] = []
 
 static func create(p_rng: RandomNumberGenerator) -> Level:
 	var level: Level = level_res.instantiate()
@@ -17,7 +21,9 @@ static func create(p_rng: RandomNumberGenerator) -> Level:
 	return level
 	
 func _ready():
+	frame = 0
 	total_pot_health = count_pot_health()
+	point_params.collide_with_areas = true
 
 func set_active(p_active: bool):
 	self.visible = p_active
@@ -25,20 +31,34 @@ func set_active(p_active: bool):
 
 func count_pot_health() -> int:
 	var total = 0
-	for pot in get_nodes_in_group("pots"):
+	for pot in entities.filter(func(entity): return entity is Pot):
 		total += pot.health
 	return total
 
 func _physics_process(_delta):
+	var cursors_per_entity = {}
+	for entity in entities:
+		#print_debug("entities in ", entity, self)
+		var cs: Array[Cursor] = []
+		cursors_per_entity[entity] = cs
+
+	for cursor in get_tree().get_nodes_in_group("cursors"):
+		#print_debug("cursor in ", cursor, self)
+		cursor.play_frame(frame)
+		point_params.position = cursor.position * view_to_world
+		var hits = dss.intersect_point(point_params)
+		for hit in hits:
+			var entity = hit.collider
+			if entities.has(entity):
+				cursors_per_entity[entity].append(cursor)
+	
+	for entity in cursors_per_entity:
+		entity.handle_cursors(cursors_per_entity[entity])
+
 	curr_pot_health = count_pot_health()
 	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - curr_pot_health) / float(total_pot_health))
-	
-func get_nodes_in_group(group: StringName) -> Array[Node]:
-	return get_tree().get_nodes_in_group(group).filter(func(node: Node):
-		return node.get_parent() == self || node.get_parent().get_parent().get_parent() == self
-	)
+	frame += 1
 
-func has_entity(entity: Entity) -> bool:
-	return get_nodes_in_group("entities").any(func(node): return node == entity)
-	
-
+func add_entity(entity: Entity):
+	entities.append(entity)
+	add_child(entity)

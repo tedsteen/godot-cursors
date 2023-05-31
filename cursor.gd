@@ -16,6 +16,7 @@ static func create(p_level: Level, p_position: Vector2) -> Cursor:
 	cursor.position = p_position
 	cursor.start_position = p_position
 	cursor.level = p_level
+	cursor.add_to_group("cursors")
 	return cursor
 
 func restart(p_level: Level):
