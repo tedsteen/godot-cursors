@@ -26,7 +26,7 @@ func handle_cursors(cursors: Array[Cursor]):
 		var clicks = cursors.reduce(func(acc, cursor: Cursor): return acc + 1 if cursor.left_clicked else 0, 0)
 		if clicks != 0:
 			click_audio.play()
-			health = max(0, health - 1)
+			health = max(0, health - clicks)
 			if health == 0:
 				break_audio.play()
 				animated_sprite.play("destroy")

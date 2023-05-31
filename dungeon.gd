@@ -103,7 +103,7 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 
 	var gem: Gem = Gem.create()
 	available_entities.append(gem)
-	#available_entities.append(Door.create(gem, pots_cleared, lever))
+	#available_entities.append(Door.create(gem, func(): return level.curr_pot_health == 0))
 
 	var stairs_up: StairsUp = StairsUp.create(goto_next_level, level)
 	var door_unlock_condition
