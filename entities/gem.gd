@@ -6,6 +6,8 @@ const gem_res = preload("res://entities/gem.tscn")
 @onready var checkpoint_audio = %CheckpointAudio
 @onready var destroy_animation = %Animation
 
+signal checkpoint_reached
+
 static func create() -> Gem:
 	var gem: Gem = gem_res.instantiate()
 	gem.add_to_group("gems")
@@ -13,6 +15,7 @@ static func create() -> Gem:
 
 func handle_cursors(cursors: Array[Cursor]):
 	if cursors.any(func(cursor): return cursor.left_clicked):
+		checkpoint_reached.emit()
 		checkpoint_audio.play()
 		disable()
 		destroy_animation.play("destroy")

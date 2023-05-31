@@ -28,7 +28,7 @@ func set_active(p_active: bool):
 	self.visible = p_active
 	#TODO: Mute everything on this level if !active
 
-func count_pot_health() -> int:
+func count_pot_health() -> int:	
 	return entities.reduce(func(acc, entity: Entity): return acc + entity.health if entity is Pot else acc, 0)
 
 func _physics_process(_delta):		

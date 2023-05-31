@@ -14,39 +14,46 @@ var cursor_lifetime: int
 var current_recording: Cursor
 var current_level: Level: set = set_current_level
 var levels: Array[Level] = []
+
 var cursors: Array
+var last_checkpoint: int
+
 var rng: RandomNumberGenerator
 var last_mouse_event: InputEventMouse
 
-static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = []) -> Dungeon:
+static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = [], p_last_checkpoint = 0) -> Dungeon:
 	var dungeon = dungeon_res.instantiate()
 	dungeon.rng_seed = p_rng_seed
 	dungeon.cursor_lifetime = p_cursor_lifetime
 	dungeon.cursors = p_cursors
+	dungeon.last_checkpoint = p_last_checkpoint
+
 	return dungeon
 
 func _ready():
 	rng = RandomNumberGenerator.new()
 	rng.seed = rng_seed
+	
+	var last_level = null
+	for i in last_checkpoint + 1:
+		var level = get_next_level(last_level)
+		last_level = level
 
-	var level1 = Level.create(rng)
-	generate_map_data(level1, 0)
-	levels.append(level1)
-	add_child(level1)
-	current_level = level1
+	current_level = levels[last_checkpoint]
+	
 	for cursor in cursors:
-		cursor.restart(level1)
+		cursor.restart(levels[cursor.spawn_level_idx])
 
 	var intro: DungeonIntro = dungeon_intro_res.instantiate()
 	intro.dungeon = self
 	get_tree().get_root().add_child(intro)
 	get_tree().get_root().remove_child(self)
 
-func get_next_level(p_level: Level, p_stairs_up: StairsUp) -> Level:
+func get_next_level(p_level: Level) -> Level:
 	var curr_index = levels.find(p_level)
 	if levels.size() <= curr_index + 1:
 		var level = Level.create(rng)
-		generate_map_data(level, curr_index + 1, [p_stairs_up.connected_stairs])
+		generate_map_data(level, curr_index + 1, []) #TODO: solve stairs down
 		level.hide()
 		levels.append(level)
 		add_child(level)
@@ -58,7 +65,7 @@ func set_current_level(new_level: Level):
 	current_level = new_level
 	
 func goto_next_level(cursor: Cursor, stairs_up: StairsUp):
-	var next_level: Level = get_next_level(cursor.level, stairs_up)	
+	var next_level: Level = get_next_level(cursor.level)
 	cursor.level = next_level
 
 	if cursor == current_recording:
@@ -68,13 +75,13 @@ func reset_time():
 	if current_recording: current_recording.show()
 	for cursor in cursors:
 		cursor.level = null
-	get_tree().get_root().add_child(Dungeon.create(rng_seed, cursor_lifetime, cursors))
+	get_tree().get_root().add_child(Dungeon.create(rng_seed, cursor_lifetime, cursors, last_checkpoint))
 	queue_free()
 
 func _physics_process(_delta):
 	if last_mouse_event:
 		if !current_recording:
-			current_recording = Cursor.create(levels[0], get_global_mouse_position())
+			current_recording = Cursor.create(current_level, levels.find(current_level), get_global_mouse_position())
 			cursors.append(current_recording)
 			current_recording.hide()
 		current_recording.record_frame(frame, last_mouse_event)
@@ -101,9 +108,14 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 	for i in range(0, 1 + int(difficulty*0.5)):
 		available_entities.append(Pot.create(int(rng.randf() * difficulty + 1)))
 
-	var gem: Gem = Gem.create()
-	available_entities.append(gem)
-	#available_entities.append(Door.create(gem, func(): return level.curr_pot_health == 0))
+	if levels.size() % 4 == 0:
+		if last_checkpoint <= levels.size() - 1:
+			var gem: Gem = Gem.create()
+			gem.checkpoint_reached.connect(func(): last_checkpoint = levels.find(current_level))
+			available_entities.append(gem)
+			#available_entities.append(Door.create(gem, func(): return level.curr_pot_health == 0))
+		else:
+			available_entities.append(null)
 
 	var stairs_up: StairsUp = StairsUp.create(goto_next_level, level)
 	var door_unlock_condition
@@ -133,9 +145,10 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 
 	for entity in available_entities:
 		var idx = rng.randi() % free_slots.size()
-		var coord = free_slots[idx]
-		entity.position = Vector2((coord % int(grid_size.x)) * CELL_SIZE, int(coord / float(grid_size.x)) * CELL_SIZE)
-		entity.add_to_group("entities")
+		if entity != null:
+			var coord = free_slots[idx]
+			entity.position = Vector2((coord % int(grid_size.x)) * CELL_SIZE, int(coord / float(grid_size.x)) * CELL_SIZE)
+			entity.add_to_group("entities")
 
-		level.add_entity(entity)
+			level.add_entity(entity)
 		free_slots.remove_at(idx)

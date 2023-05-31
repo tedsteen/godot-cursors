@@ -10,12 +10,14 @@ var start_position: Vector2
 var left_pressed = false
 var left_clicked = false
 var level: Level: set = set_level
+var spawn_level_idx: int
 
-static func create(p_level: Level, p_position: Vector2) -> Cursor:
+static func create(p_level: Level, p_spawn_level_idx: int, p_position: Vector2) -> Cursor:
 	var cursor: Cursor = cursor_res.instantiate()
 	cursor.position = p_position
 	cursor.start_position = p_position
 	cursor.level = p_level
+	cursor.spawn_level_idx = p_spawn_level_idx
 	cursor.add_to_group("cursors")
 	return cursor
 
