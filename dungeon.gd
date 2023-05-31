@@ -80,10 +80,11 @@ func _physics_process(_delta):
 		current_recording.record_frame(frame, last_mouse_event)
 		last_mouse_event = null
 
+	for cursor in get_tree().get_nodes_in_group("cursors"):
+		cursor.play_frame(frame)
 	time_rect.size.y = background_rect.size.y * (1 - frame / float(cursor_lifetime * Engine.physics_ticks_per_second))
 
 	frame += 1
-
 	if frame == (cursor_lifetime * Engine.physics_ticks_per_second):
 		reset_time()
 

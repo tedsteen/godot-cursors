@@ -21,4 +21,5 @@ func handle_cursors(cursors: Array[Cursor]):
 		#await checkpoint_audio.finished
 		await destroy_animation.animation_finished
 		
-		queue_free()
+		#queue_free() # TODO: This would be nicer, but we keep a reference to all entities in level
+		visible = false

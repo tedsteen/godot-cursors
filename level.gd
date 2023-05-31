@@ -10,7 +10,6 @@ const level_res = preload("res://Level.tscn")
 
 var point_params: = PhysicsPointQueryParameters2D.new()
 var rng: RandomNumberGenerator
-var frame
 var total_pot_health: int
 var curr_pot_health: int
 var entities: Array[Entity] = []
@@ -21,7 +20,6 @@ static func create(p_rng: RandomNumberGenerator) -> Level:
 	return level
 	
 func _ready():
-	frame = 0
 	total_pot_health = count_pot_health()
 	point_params.collide_with_areas = true
 
@@ -35,8 +33,9 @@ func count_pot_health() -> int:
 		total += pot.health
 	return total
 
-func _physics_process(_delta):
+func _physics_process(_delta):		
 	var cursors_per_entity = {}
+
 	for entity in entities:
 		#print_debug("entities in ", entity, self)
 		var cs: Array[Cursor] = []
@@ -44,12 +43,11 @@ func _physics_process(_delta):
 
 	for cursor in get_tree().get_nodes_in_group("cursors"):
 		#print_debug("cursor in ", cursor, self)
-		cursor.play_frame(frame)
 		point_params.position = cursor.position * view_to_world
 		var hits = dss.intersect_point(point_params)
 		for hit in hits:
 			var entity = hit.collider
-			if entities.has(entity):
+			if entities.has(entity): #if entity is on the level
 				cursors_per_entity[entity].append(cursor)
 	
 	for entity in cursors_per_entity:
@@ -57,7 +55,6 @@ func _physics_process(_delta):
 
 	curr_pot_health = count_pot_health()
 	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - curr_pot_health) / float(total_pot_health))
-	frame += 1
 
 func add_entity(entity: Entity):
 	entities.append(entity)
