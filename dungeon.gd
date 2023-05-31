@@ -135,7 +135,7 @@ func generate_map_data(level: Level, difficulty: int):
 	var stairs_up: StairsUp = StairsUp.create(goto_next_level)
 	var door_unlock_condition
 	
-	if true or difficulty > 1 && rng.randi() % 3 == 0:
+	if difficulty > 1 && rng.randi() % 3 == 0:
 		var lever: Lever = Lever.create()
 		available_entities.append(lever)
 		door_unlock_condition = func(): return level.curr_pot_health == 0 && lever && lever.is_pulled
@@ -154,6 +154,6 @@ func generate_map_data(level: Level, difficulty: int):
 		var coord = free_slots[idx]
 		entity.position = Vector2((coord % int(size.x)) * CELL_SIZE, int(coord / float(size.x)) * CELL_SIZE)
 		entity.add_to_group("entities")
-		#print_debug("ADDING TO LEVEL ", entity, level)
+
 		level.add_child(entity)
 		free_slots.remove_at(idx)
