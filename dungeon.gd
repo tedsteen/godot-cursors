@@ -13,7 +13,6 @@ const dungeon_res = preload("res://dungeon.tscn")
 @onready var view_to_world = self.get_canvas_transform().affine_inverse()
 @onready var dss: = get_world_2d().direct_space_state
 
-var time
 var frame
 var current_recording: Cursor
 var levels: Array[Level] = []
@@ -50,7 +49,6 @@ func goto_next_level(cursor: Cursor):
 	cursor.level = next_level
 
 func reset_time():
-	time = 0
 	frame = 0
 	for level in levels:
 		level.queue_free()
@@ -82,10 +80,9 @@ func reset_time():
 var last_mouse_event: InputEventMouse
 
 func _physics_process(delta):
-	time += delta
-	if time >= cursor_lifetime:
+	if frame == (cursor_lifetime * Engine.physics_ticks_per_second):
 		reset_time()
-		return
+		return		
 
 	if last_mouse_event:
 		current_recording.record_frame(frame, last_mouse_event)
@@ -109,7 +106,7 @@ func _physics_process(delta):
 		for entity in cursors_per_entity:
 			entity.handle_cursors(cursors_per_entity[entity])
 
-	time_rect.size.y = background_rect.size.y * (1 - time / cursor_lifetime)
+	time_rect.size.y = background_rect.size.y * (1 - frame / float(cursor_lifetime * Engine.physics_ticks_per_second))
 	var total_pot_health = current_recording.level.total_pot_health
 	var remaining_pot_health = current_recording.level.curr_pot_health
 
