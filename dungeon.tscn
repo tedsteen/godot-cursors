@@ -1,15 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://khpflgke7d8n"]
 
-[ext_resource type="Script" path="res://dungeon.gd" id="1_bv2kw"]
+[ext_resource type="Script" path="res://dungeon.gd" id="1_8uvpl"]
 
-[node name="BackgroundRect" type="Control"]
+[node name="Dungeon" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bv2kw")
+script = ExtResource("1_8uvpl")
 
 [node name="TimeRect" type="ColorRect" parent="."]
 unique_name_in_owner = true

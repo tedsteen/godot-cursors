@@ -117,7 +117,7 @@ func _input(event):
 			last_mouse_event = event
 
 func generate_map_data(level: Level, difficulty: int, static_entities: Array[Entity] = []):
-	var size = background_rect.size / CELL_SIZE
+	var grid_size = background_rect.size / CELL_SIZE
 	var available_entities: Array[Entity] = []
 
 	for i in range(0, 1 + int(difficulty*0.5)):
@@ -139,12 +139,12 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 
 	available_entities.append(Door.create(stairs_up, door_unlock_condition))
 	
-	var free_slots: Array = range(0, size.x * size.y)
+	var free_slots: Array = range(0, grid_size.x * grid_size.y)
 	
 	for static_entity in static_entities:
 		var x = static_entity.position.x
 		var y = static_entity.position.y
-		var idx = x + y * size.x
+		var idx = x + y * grid_size.x
 		static_entity.add_to_group("entities")
 		level.add_child(static_entity)
 		free_slots.remove_at(idx)
@@ -156,7 +156,7 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 	for entity in available_entities:
 		var idx = rng.randi() % free_slots.size()
 		var coord = free_slots[idx]
-		entity.position = Vector2((coord % int(size.x)) * CELL_SIZE, int(coord / float(size.x)) * CELL_SIZE)
+		entity.position = Vector2((coord % int(grid_size.x)) * CELL_SIZE, int(coord / float(grid_size.x)) * CELL_SIZE)
 		entity.add_to_group("entities")
 
 		level.add_child(entity)
