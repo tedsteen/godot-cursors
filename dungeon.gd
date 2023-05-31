@@ -4,8 +4,8 @@ class_name Dungeon
 const dungeon_intro_res = preload("res://dungeon_intro.tscn")
 const dungeon_res = preload("res://dungeon.tscn")
 
-@export var rng_seed = 0
-@export var cursor_lifetime = 15
+var rng_seed: int
+var cursor_lifetime: int
 
 @onready var background_rect = %BackgroundRect
 @onready var time_rect = %TimeRect
@@ -20,9 +20,10 @@ var rng: RandomNumberGenerator
 
 var point_params: = PhysicsPointQueryParameters2D.new()
 
-static func create(p_rng_seed: int) -> Dungeon:
+static func create(p_rng_seed: int, p_cursor_lifetime: int) -> Dungeon:
 	var dungeon = dungeon_res.instantiate()
 	dungeon.rng_seed = p_rng_seed
+	dungeon.cursor_lifetime = p_cursor_lifetime
 	return dungeon
 
 func _ready():

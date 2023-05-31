@@ -47,7 +47,6 @@ func has_entity(entity: Entity) -> bool:
 	return get_nodes_in_group("entities").any(func(node): return node == entity)
 	
 func generate_map_data():
-	
 	var available_entities: Array[Entity] = []
 
 	for i in range(0, 1 + int(difficulty*0.5)):
