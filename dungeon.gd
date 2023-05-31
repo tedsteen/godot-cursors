@@ -1,13 +1,12 @@
-extends Node2D
+extends Control
 class_name Dungeon
 
 const dungeon_intro_res = preload("res://dungeon_intro.tscn")
 const dungeon_res = preload("res://dungeon.tscn")
 const CELL_SIZE = 90
 
-@onready var background_rect = %BackgroundRect
+@onready var background_rect = $"."
 @onready var time_rect = %TimeRect
-@onready var progress_rect = %ProgressRect
 @onready var view_to_world = self.get_canvas_transform().affine_inverse()
 @onready var dss: = get_world_2d().direct_space_state
 
@@ -105,10 +104,7 @@ func _physics_process(_delta):
 			entity.handle_cursors(cursors_per_entity[entity])
 
 	time_rect.size.y = background_rect.size.y * (1 - frame / float(cursor_lifetime * Engine.physics_ticks_per_second))
-	var total_pot_health = current_level.total_pot_health
-	var remaining_pot_health = current_level.curr_pot_health
 
-	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - remaining_pot_health) / float(total_pot_health))
 	frame += 1
 
 	if frame == (cursor_lifetime * Engine.physics_ticks_per_second):

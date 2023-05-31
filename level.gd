@@ -1,5 +1,8 @@
-extends Node2D
+extends Control
 class_name Level
+
+@onready var background_rect = $"."
+@onready var progress_rect = %ProgressRect
 
 const level_res = preload("res://Level.tscn")
 
@@ -28,6 +31,7 @@ func count_pot_health() -> int:
 
 func _physics_process(_delta):
 	curr_pot_health = count_pot_health()
+	progress_rect.size.y = 0 if total_pot_health == 0 else background_rect.size.y * (1 - (total_pot_health - curr_pot_health) / float(total_pot_health))
 	
 func get_nodes_in_group(group: StringName) -> Array[Node]:
 	return get_tree().get_nodes_in_group(group).filter(func(node: Node):

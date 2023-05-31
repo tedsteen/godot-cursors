@@ -1,6 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqqr1kr6p71dp"]
+[gd_scene load_steps=2 format=3 uid="uid://1n2baqd3gbac"]
 
-[ext_resource type="Script" path="res://level.gd" id="1_qbpj7"]
+[ext_resource type="Script" path="res://level.gd" id="1_yy580"]
 
-[node name="level" type="Node2D"]
-script = ExtResource("1_qbpj7")
+[node name="level" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yy580")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 90
+theme_override_constants/margin_right = 90
+
+[node name="ProgressRect" type="ColorRect" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0.0666667, 0.0196078, 0.188235, 1)
