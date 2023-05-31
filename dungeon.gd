@@ -23,7 +23,6 @@ var last_mouse_event: InputEventMouse
 var point_params: = PhysicsPointQueryParameters2D.new()
 
 static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = []) -> Dungeon:
-	print_debug("CREATE")
 	var dungeon = dungeon_res.instantiate()
 	dungeon.rng_seed = p_rng_seed
 	dungeon.cursor_lifetime = p_cursor_lifetime
@@ -49,11 +48,11 @@ func _ready():
 	get_tree().get_root().add_child(intro)
 	get_tree().get_root().remove_child(self)
 
-func get_next_level(p_level: Level) -> Level:
+func get_next_level(p_level: Level, p_stairs_up: StairsUp) -> Level:
 	var curr_index = levels.find(p_level)
 	if levels.size() <= curr_index + 1:
 		var level = Level.create(rng)
-		generate_map_data(level, curr_index + 1)
+		generate_map_data(level, curr_index + 1, [p_stairs_up.connected_stairs])
 		level.hide()
 		levels.append(level)
 		add_child(level)
@@ -64,8 +63,8 @@ func set_current_level(new_level: Level):
 	new_level.set_active(true)
 	current_level = new_level
 	
-func goto_next_level(cursor: Cursor):
-	var next_level: Level = get_next_level(cursor.level)	
+func goto_next_level(cursor: Cursor, stairs_up: StairsUp):
+	var next_level: Level = get_next_level(cursor.level, stairs_up)	
 	cursor.level = next_level
 
 	if cursor == current_recording:
@@ -121,7 +120,7 @@ func _input(event):
 		if not last_mouse_event is InputEventMouseButton:
 			last_mouse_event = event
 
-func generate_map_data(level: Level, difficulty: int):
+func generate_map_data(level: Level, difficulty: int, static_entities: Array[Entity] = []):
 	var size = background_rect.size / CELL_SIZE
 	var available_entities: Array[Entity] = []
 
@@ -132,7 +131,7 @@ func generate_map_data(level: Level, difficulty: int):
 	available_entities.append(gem)
 	#available_entities.append(Door.create(gem, pots_cleared, lever))
 
-	var stairs_up: StairsUp = StairsUp.create(goto_next_level)
+	var stairs_up: StairsUp = StairsUp.create(goto_next_level, level)
 	var door_unlock_condition
 	
 	if difficulty > 1 && rng.randi() % 3 == 0:
@@ -144,11 +143,20 @@ func generate_map_data(level: Level, difficulty: int):
 
 	available_entities.append(Door.create(stairs_up, door_unlock_condition))
 	
-	if available_entities.size() > size.x * size.y:
+	var free_slots: Array = range(0, size.x * size.y)
+	
+	for static_entity in static_entities:
+		var x = static_entity.position.x
+		var y = static_entity.position.y
+		var idx = x + y * size.x
+		static_entity.add_to_group("entities")
+		level.add_child(static_entity)
+		free_slots.remove_at(idx)
+		
+	if available_entities.size() > free_slots.size():
 		push_error("Can't fit content on map.")
 		return
-	
-	var free_slots: Array = range(0, size.x * size.y)
+
 	for entity in available_entities:
 		var idx = rng.randi() % free_slots.size()
 		var coord = free_slots[idx]
