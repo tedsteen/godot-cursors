@@ -13,6 +13,7 @@ var rng: RandomNumberGenerator
 var total_pot_health: int
 var curr_pot_health: int
 var entities: Array[Entity] = []
+var cursors: Array[Cursor] = []
 
 static func create(p_rng: RandomNumberGenerator) -> Level:
 	var level: Level = level_res.instantiate()
@@ -28,10 +29,7 @@ func set_active(p_active: bool):
 	#TODO: Mute everything on this level if !active
 
 func count_pot_health() -> int:
-	var total = 0
-	for pot in entities.filter(func(entity): return entity is Pot):
-		total += pot.health
-	return total
+	return entities.reduce(func(acc, entity: Entity): return acc + entity.health if entity is Pot else acc, 0)
 
 func _physics_process(_delta):		
 	var cursors_per_entity = {}
@@ -41,7 +39,7 @@ func _physics_process(_delta):
 		var cs: Array[Cursor] = []
 		cursors_per_entity[entity] = cs
 
-	for cursor in get_tree().get_nodes_in_group("cursors"):
+	for cursor in cursors:
 		#print_debug("cursor in ", cursor, self)
 		point_params.position = cursor.position * view_to_world
 		var hits = dss.intersect_point(point_params)

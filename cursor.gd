@@ -26,8 +26,12 @@ func restart(p_level: Level):
 	position = start_position
 	
 func set_level(new_level: Level):
-	if level: level.remove_child(self)
-	if new_level: new_level.add_child(self)
+	if level:
+		level.remove_child(self)
+		level.cursors.erase(self)
+	if new_level:
+		new_level.add_child(self)
+		new_level.cursors.append(self)
 	level = new_level
 
 func record_frame(frame: int, mouse_event: InputEventMouse):

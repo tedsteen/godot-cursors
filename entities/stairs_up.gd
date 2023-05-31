@@ -18,9 +18,8 @@ static func create(p_goto_next_level: Callable, p_level: Level) -> StairsUp:
 	return stairs_up
 
 func _physics_process(_delta):
-	#print_debug("TED", get_parent().get_parent().position)
-	#connected_stairs.position = get_parent().get_parent().position
-	pass
+	#TODO: Fix..
+	connected_stairs.position = position
 
 func handle_cursors(cursors: Array[Cursor]):
 	var clicked_cursors = cursors.filter(func(cursor: Cursor): return cursor.left_clicked)
