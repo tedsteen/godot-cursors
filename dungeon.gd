@@ -31,7 +31,7 @@ static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = [
 	return dungeon
 
 func _ready():
-	print_debug("READY")
+
 	rng = RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	point_params.collide_with_areas = true
@@ -44,11 +44,10 @@ func _ready():
 	for cursor in cursors:
 		cursor.restart(level1)
 
-	#var intro: DungeonIntro = dungeon_intro_res.instantiate()
-	#intro.time = 3
-	#intro.dungeon = self
-	#get_tree().get_root().add_child(intro)
-	#get_tree().get_root().remove_child(self)
+	var intro: DungeonIntro = dungeon_intro_res.instantiate()
+	intro.dungeon = self
+	get_tree().get_root().add_child(intro)
+	get_tree().get_root().remove_child(self)
 
 func get_next_level(p_level: Level) -> Level:
 	var curr_index = levels.find(p_level)
@@ -73,7 +72,6 @@ func goto_next_level(cursor: Cursor):
 		current_level = next_level
 	
 func reset_time():
-	print_debug("RESET")
 	if current_recording: current_recording.show()
 	for cursor in cursors:
 		cursor.level = null

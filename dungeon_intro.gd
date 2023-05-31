@@ -2,7 +2,7 @@ extends Control
 class_name DungeonIntro
 @onready var countdown_label = %CountdownLabel
 var dungeon: Dungeon
-@export var time = 4
+@export var time = 3
 
 func _process(delta):
 	time -= delta*2
