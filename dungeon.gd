@@ -115,7 +115,6 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 	else:
 		door_unlock_condition = func(): return level.curr_pot_health == 0
 
-	level.entities.append(stairs_up) #TODO: could this be done in a better way?
 	available_entities.append(Door.create(stairs_up, door_unlock_condition))
 	
 	var free_slots: Array = range(0, grid_size.x * grid_size.y)

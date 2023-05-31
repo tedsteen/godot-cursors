@@ -24,6 +24,12 @@ func _ready():
 	var entity = get_hidden_entity()
 	if entity:
 		hidden_entity_container.add_child(entity)
+		var level = get_parent()
+		if level is Level:
+			level.entities.append(entity)
+		else:
+			push_warning("Door not added to a level, not sure what to do with the hidden entity.")
+		
 		entity.disable()
 
 func _physics_process(_delta):
