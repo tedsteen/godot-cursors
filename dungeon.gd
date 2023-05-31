@@ -134,7 +134,7 @@ func generate_map_data(level: Level, difficulty: int):
 	available_entities.append(gem)
 	#available_entities.append(Door.create(gem, pots_cleared, lever))
 
-	var stairs_up: StairsUp = StairsUp.create()
+	var stairs_up: StairsUp = StairsUp.create(goto_next_level)
 	var door_unlock_condition
 	
 	if true or difficulty > 1 && rng.randi() % 3 == 0:
