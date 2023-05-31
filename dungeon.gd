@@ -35,7 +35,7 @@ func _ready():
 	rng = RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	point_params.collide_with_areas = true
-	#point_params.collision_mask = 2
+
 	var level1 = Level.create(rng)
 	generate_map_data(level1, 0)
 	levels.append(level1)
