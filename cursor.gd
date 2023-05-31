@@ -6,22 +6,27 @@ const cursor_res = preload("res://cursor.tscn")
 @export var cursor_click_size = 0.7
 
 var history = {}
+var start_position: Vector2
 var left_pressed = false
 var left_clicked = false
 var level: Level: set = set_level
-var goto_next_level: Callable
 
-static func create(p_level: Level, p_position: Vector2, p_goto_next_level: Callable) -> Cursor:
+static func create(p_level: Level, p_position: Vector2) -> Cursor:
 	var cursor: Cursor = cursor_res.instantiate()
 	cursor.position = p_position
-	cursor.goto_next_level = p_goto_next_level.bind(cursor)
+	cursor.start_position = p_position
 	cursor.level = p_level
-	cursor.add_to_group("cursors")
 	return cursor
 
+func restart(p_level: Level):
+	level = p_level
+	left_pressed = false
+	left_clicked = false
+	position = start_position
+	
 func set_level(new_level: Level):
 	if level: level.remove_child(self)
-	new_level.add_child(self)
+	if new_level: new_level.add_child(self)
 	level = new_level
 
 func record_frame(frame: int, mouse_event: InputEventMouse):

@@ -16,5 +16,3 @@ func handle_cursors(cursors: Array[Cursor]):
 		next_level_audio.play()
 	for cursor in clicked_cursors:
 		cursor.goto_next_level.call()
-
-

@@ -4,9 +4,6 @@ class_name DungeonIntro
 var dungeon: Dungeon
 @export var time = 4
 
-func _ready():
-	print_debug("Ready in intro!")
-
 func _process(delta):
 	time -= delta*2
 	countdown_label.text = "%d" % int(time + 1)
