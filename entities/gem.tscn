@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://buvawxeb6kl3a"]
 
 [ext_resource type="PackedScene" uid="uid://c5ujfd7s0y61c" path="res://entities/entity.tscn" id="1_seg1h"]
-[ext_resource type="Script" path="res://entities/gem.gd" id="2_jubiw"]
+[ext_resource type="Script" path="res://entities/gem.gd" id="2_iqalu"]
 [ext_resource type="Texture2D" uid="uid://c6v5aalapweko" path="res://assets/checkpoint.png" id="2_sqbhi"]
 [ext_resource type="AudioStream" uid="uid://b4ajxkwvjklcd" path="res://assets/audio/checkpoint.wav" id="4_gmdhn"]
 
@@ -106,7 +106,7 @@ _data = {
 }
 
 [node name="Gem" instance=ExtResource("1_seg1h")]
-script = ExtResource("2_jubiw")
+script = ExtResource("2_iqalu")
 
 [node name="AnimatedSprite2D" parent="." index="0"]
 scale = Vector2(4, 4)
