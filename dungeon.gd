@@ -53,7 +53,7 @@ func get_next_level(p_level: Level) -> Level:
 	var curr_index = levels.find(p_level)
 	if levels.size() <= curr_index + 1:
 		var level = Level.create(rng)
-		generate_map_data(level, curr_index + 1, []) #TODO: solve stairs down
+		generate_map_data(level, levels.size(), 1.0, []) #TODO: solve stairs down
 		level.hide()
 		levels.append(level)
 		add_child(level)
@@ -101,15 +101,20 @@ func _input(event):
 		if not last_mouse_event is InputEventMouseButton:
 			last_mouse_event = event
 
-func generate_map_data(level: Level, difficulty: int, static_entities: Array[Entity] = []):
+func generate_map_data(level: Level, level_index: int, difficulty = 1.0, static_entities: Array[Entity] = []):
 	var grid_size = background_rect.size / CELL_SIZE
 	var available_entities: Array[Entity] = []
 
-	for i in range(0, 1 + int(difficulty*0.5)):
-		available_entities.append(Pot.create(int(rng.randf() * difficulty + 1)))
+	# See https://www.desmos.com/calculator/odfytj8gij
+	var x0 = -32
+	var y0 = 42
+	var k = 2.2
+	var pot_count = floor((log(level_index-x0) / log(k))*10-y0)
+	for i in pot_count:
+		available_entities.append(Pot.create(int(rng.randf() * level_index + 2)))
 
-	if levels.size() % 4 == 0:
-		if last_checkpoint <= levels.size() - 1:
+	if level_index % 4 == 0:
+		if last_checkpoint <= level_index - 1:
 			var gem: Gem = Gem.create()
 			gem.checkpoint_reached.connect(func(): last_checkpoint = levels.find(current_level))
 			available_entities.append(gem)
@@ -120,13 +125,16 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 	var stairs_up: StairsUp = StairsUp.create(goto_next_level, level)
 	var door_unlock_condition
 	
-	if difficulty > 1 && rng.randi() % 3 == 0:
+	if level_index > 1 && rng.randi() % 3 == 0:
 		var lever: Lever = Lever.create()
 		available_entities.append(lever)
 		door_unlock_condition = func(): return level.curr_pot_health == 0 && lever && lever.is_pulled
 	else:
 		door_unlock_condition = func(): return level.curr_pot_health == 0
 
+	var unlock_all_doors = false
+	if unlock_all_doors:
+		door_unlock_condition = func(): return true
 	available_entities.append(Door.create(stairs_up, door_unlock_condition))
 	
 	var free_slots: Array = range(0, grid_size.x * grid_size.y)
@@ -138,7 +146,7 @@ func generate_map_data(level: Level, difficulty: int, static_entities: Array[Ent
 		static_entity.add_to_group("entities")
 		level.add_entity(static_entity)
 		free_slots.remove_at(idx)
-		
+
 	if available_entities.size() > free_slots.size():
 		push_error("Can't fit content on map.")
 		return
