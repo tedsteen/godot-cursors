@@ -23,7 +23,7 @@ func _ready():
 
 func handle_cursors(cursors: Array[Cursor]):
 	if health > 0:
-		var clicks = cursors.reduce(func(acc, cursor: Cursor): return acc + 1 if cursor.left_clicked else 0, 0)
+		var clicks = cursors.reduce(func(acc, cursor: Cursor): return acc + (1 if cursor.left_clicked else 0), 0)
 		if clicks != 0:
 			click_audio.play()
 			health = max(0, health - clicks)

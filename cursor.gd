@@ -36,19 +36,15 @@ func set_level(new_level: Level):
 		new_level.cursors.append(self)
 	level = new_level
 
-func record_frame(frame: int, mouse_event: InputEventMouse):
-	self.history[frame] = mouse_event
+func record_frame(frame: int):
+	self.history[frame] = { "position": position, "left_pressed": left_pressed, "left_clicked": left_clicked }
 
 func play_frame(frame: int):
-	if self.history.has(frame):
-		var curr_frame: InputEventMouse = self.history[frame]
-		self.set_position(curr_frame.position)
+	var item: Dictionary = self.history[frame]
+	self.position = item.position
+	left_pressed = item.left_pressed
+	left_clicked = item.left_clicked
+	
+	var texture_scale = cursor_click_size if left_pressed else 1.0
 
-		if curr_frame is InputEventMouseButton:
-			left_pressed = curr_frame.button_index == MouseButton.MOUSE_BUTTON_LEFT and curr_frame.pressed
-			left_clicked = left_pressed 
-		var texture_scale = cursor_click_size if left_pressed else 1.0
-
-		self.scale = Vector2(texture_scale, texture_scale)
-		return
-	left_clicked = false
+	self.scale = Vector2(texture_scale, texture_scale)

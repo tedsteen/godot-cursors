@@ -11,6 +11,7 @@ const CELL_SIZE = 90
 var frame = 0
 var rng_seed: int
 var cursor_lifetime: int
+var click_recorded = false
 var current_recording: Cursor
 var current_level: Level: set = set_current_level
 var levels: Array[Level] = []
@@ -19,7 +20,6 @@ var cursors: Array
 var last_checkpoint: int
 
 var rng: RandomNumberGenerator
-var last_mouse_event: InputEventMouse
 
 static func create(p_rng_seed: int, p_cursor_lifetime: int, p_cursors: Array = [], p_last_checkpoint = 0) -> Dungeon:
 	var dungeon = dungeon_res.instantiate()
@@ -44,6 +44,10 @@ func _ready():
 	for cursor in cursors:
 		cursor.restart(levels[cursor.spawn_level_idx])
 
+	current_recording = Cursor.create(current_level, levels.find(current_level), get_global_mouse_position())
+	cursors.append(current_recording)
+	current_recording.hide()
+	
 	var intro: DungeonIntro = dungeon_intro_res.instantiate()
 	intro.dungeon = self
 	get_tree().get_root().add_child(intro)
@@ -72,20 +76,17 @@ func goto_next_level(cursor: Cursor, stairs_up: StairsUp):
 		current_level = next_level
 	
 func reset_time():
-	if current_recording: current_recording.show()
+	current_recording.show()
 	for cursor in cursors:
 		cursor.level = null
 	get_tree().get_root().add_child(Dungeon.create(rng_seed, cursor_lifetime, cursors, last_checkpoint))
 	queue_free()
 
 func _physics_process(_delta):
-	if last_mouse_event:
-		if !current_recording:
-			current_recording = Cursor.create(current_level, levels.find(current_level), get_global_mouse_position())
-			cursors.append(current_recording)
-			current_recording.hide()
-		current_recording.record_frame(frame, last_mouse_event)
-		last_mouse_event = null
+	#print_debug("FRAME ", frame, current_recording.left_clicked, current_recording.left_pressed)
+	current_recording.left_clicked = click_recorded
+	click_recorded = false
+	current_recording.record_frame(frame)
 
 	for cursor in get_tree().get_nodes_in_group("cursors"):
 		cursor.play_frame(frame)
@@ -97,9 +98,11 @@ func _physics_process(_delta):
 
 func _input(event):
 	if event is InputEventMouse:
-		# Prioritise clicks
-		if not last_mouse_event is InputEventMouseButton:
-			last_mouse_event = event
+		current_recording.position = event.position
+		if event is InputEventMouseButton:
+			var left_pressed = event.button_index == MouseButton.MOUSE_BUTTON_LEFT and event.pressed
+			current_recording.left_pressed = left_pressed
+			click_recorded = click_recorded || left_pressed
 
 func generate_map_data(level: Level, level_index: int, difficulty = 1.0, static_entities: Array[Entity] = []):
 	var grid_size = background_rect.size / CELL_SIZE
